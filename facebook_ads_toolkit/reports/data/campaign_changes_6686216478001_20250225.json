@@ -1,0 +1,270 @@
+{
+  "campaign": {
+    "id": "6686216478001",
+    "name": "[15.02.2025] Продвижение Отправить сообщение",
+    "objective": "MESSAGES",
+    "status": "ACTIVE",
+    "created_time": "2025-02-15T20:40:39-0800",
+    "updated_time": "2025-02-15T20:41:28-0800"
+  },
+  "changes": [
+    {
+      "event_type": "create_audience",
+      "event_time": "2025-02-22T05:12:38+0000",
+      "object_id": "6695623424801",
+      "object_name": "asa_auto_custom_audience",
+      "actor_id": "0",
+      "actor_name": "Meta",
+      "application_id": "0"
+    },
+    {
+      "event_type": "first_delivery_event",
+      "event_time": "2025-02-21T13:57:06+0000",
+      "object_id": "6694036689001",
+      "object_name": "Creo 3",
+      "actor_id": "0",
+      "actor_name": "Meta",
+      "application_id": "0"
+    },
+    {
+      "event_type": "first_delivery_event",
+      "event_time": "2025-02-21T13:55:10+0000",
+      "object_id": "6694036688801",
+      "object_name": "Creo 4",
+      "actor_id": "0",
+      "actor_name": "Meta",
+      "application_id": "0"
+    },
+    {
+      "event_type": "first_delivery_event",
+      "event_time": "2025-02-21T13:52:47+0000",
+      "object_id": "6694036687801",
+      "object_name": "Creo 1",
+      "actor_id": "0",
+      "actor_name": "Meta",
+      "application_id": "0"
+    },
+    {
+      "event_type": "first_delivery_event",
+      "event_time": "2025-02-21T13:48:16+0000",
+      "object_id": "6694036688401",
+      "object_name": "Creo 2",
+      "actor_id": "0",
+      "actor_name": "Meta",
+      "application_id": "0"
+    },
+    {
+      "event_type": "update_ad_run_status",
+      "event_time": "2025-02-21T13:24:35+0000",
+      "object_id": "6694036687801",
+      "object_name": "Creo 1",
+      "actor_id": "0",
+      "actor_name": "Meta",
+      "application_id": "0"
+    },
+    {
+      "event_type": "update_ad_run_status",
+      "event_time": "2025-02-21T13:22:59+0000",
+      "object_id": "6694036687801",
+      "object_name": "Creo 1",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "update_campaign_run_status",
+      "event_time": "2025-02-21T13:20:53+0000",
+      "object_id": "6694036687601",
+      "object_name": "Джульетта | 21.02.25",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "update_ad_run_status",
+      "event_time": "2025-02-21T13:20:42+0000",
+      "object_id": "6694036688801",
+      "object_name": "Creo 4",
+      "actor_id": "0",
+      "actor_name": "Meta",
+      "application_id": "0"
+    },
+    {
+      "event_type": "update_ad_run_status",
+      "event_time": "2025-02-21T13:19:12+0000",
+      "object_id": "6694036688401",
+      "object_name": "Creo 2",
+      "actor_id": "0",
+      "actor_name": "Meta",
+      "application_id": "0"
+    },
+    {
+      "event_type": "update_ad_run_status",
+      "event_time": "2025-02-21T13:18:50+0000",
+      "object_id": "6694036689001",
+      "object_name": "Creo 3",
+      "actor_id": "0",
+      "actor_name": "Meta",
+      "application_id": "0"
+    },
+    {
+      "event_type": "update_ad_run_status",
+      "event_time": "2025-02-21T13:17:53+0000",
+      "object_id": "6694036688801",
+      "object_name": "Creo 4",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "update_ad_run_status",
+      "event_time": "2025-02-21T13:17:52+0000",
+      "object_id": "6694036688401",
+      "object_name": "Creo 2",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "update_ad_run_status",
+      "event_time": "2025-02-21T13:17:52+0000",
+      "object_id": "6694036689001",
+      "object_name": "Creo 3",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "create_ad",
+      "event_time": "2025-02-21T13:17:16+0000",
+      "object_id": "6694036687801",
+      "object_name": "Creo 1",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "create_ad",
+      "event_time": "2025-02-21T13:17:16+0000",
+      "object_id": "6694036688401",
+      "object_name": "Creo 2",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "create_ad",
+      "event_time": "2025-02-21T13:17:16+0000",
+      "object_id": "6694036688801",
+      "object_name": "Creo 4",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "create_ad",
+      "event_time": "2025-02-21T13:17:16+0000",
+      "object_id": "6694036689001",
+      "object_name": "Creo 3",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "update_campaign_budget_scheduling_state",
+      "event_time": "2025-02-21T13:17:14+0000",
+      "object_id": "6694036689401",
+      "object_name": "Интересы 23-50",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "update_ad_set_target_spec",
+      "event_time": "2025-02-21T13:17:14+0000",
+      "object_id": "6694036689401",
+      "object_name": "Интересы 23-50",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "update_ad_set_optimization_goal",
+      "event_time": "2025-02-21T13:17:14+0000",
+      "object_id": "6694036689401",
+      "object_name": "Интересы 23-50",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "update_ad_set_bid_strategy",
+      "event_time": "2025-02-21T13:17:14+0000",
+      "object_id": "6694036689401",
+      "object_name": "Интересы 23-50",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "create_ad_set",
+      "event_time": "2025-02-21T13:17:14+0000",
+      "object_id": "6694036689401",
+      "object_name": "Интересы 23-50",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "create_campaign_group",
+      "event_time": "2025-02-21T13:17:13+0000",
+      "object_id": "6694036687601",
+      "object_name": "Джульетта | 21.02.25",
+      "actor_id": "1674593370150497",
+      "actor_name": "Эдуард Сергеев",
+      "application_id": "119211728144504",
+      "application_name": "Power Editor"
+    },
+    {
+      "event_type": "create_audience",
+      "event_time": "2025-02-20T22:03:35+0000",
+      "object_id": "6692464073801",
+      "object_name": "asa_auto_custom_audience",
+      "actor_id": "0",
+      "actor_name": "Meta",
+      "application_id": "0"
+    },
+    {
+      "event_type": "create_audience",
+      "event_time": "2025-02-20T22:03:35+0000",
+      "object_id": "6692464074001",
+      "object_name": "asa_auto_custom_audience",
+      "actor_id": "0",
+      "actor_name": "Meta",
+      "application_id": "0"
+    },
+    {
+      "event_type": "ad_account_billing_charge",
+      "event_time": "2025-02-18T17:14:49+0000",
+      "object_id": "259290474190473",
+      "object_name": "259290474190473",
+      "actor_id": "0",
+      "actor_name": "Meta",
+      "application_id": "0"
+    }
+  ]
+}

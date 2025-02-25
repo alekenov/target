@@ -1,0 +1,64 @@
+{
+  "campaign_id": "6683158565001",
+  "campaign_name": "Пионов розы - 11.02.25 д",
+  "objective": "OUTCOME_TRAFFIC",
+  "status": "ACTIVE",
+  "created_time": "2025-02-11T01:21:50-0800",
+  "performance": {
+    "spend": "4.21",
+    "impressions": "4704",
+    "clicks": "19",
+    "ctr": "0.403912",
+    "cpc": "0.221579",
+    "reach": "4656",
+    "frequency": "1.010309",
+    "kpis": {
+      "ctr": 0.40391156462585037,
+      "cpc": 0.22157894736842104,
+      "frequency": 1.0103092783505154,
+      "cpr": 0.0009042096219931271
+    }
+  },
+  "adsets_analysis": [
+    {
+      "adset_id": "6683158564801",
+      "adset_name": "20-50 | Интересы",
+      "status": "ACTIVE",
+      "performance": {
+        "spend": "4.21",
+        "impressions": "4704",
+        "clicks": "19",
+        "ctr": "0.403912",
+        "cpc": "0.221579",
+        "reach": "4656",
+        "frequency": "1.010309",
+        "kpis": {
+          "ctr": 0.40391156462585037,
+          "cpc": 0.22157894736842104,
+          "frequency": 1.0103092783505154,
+          "cpr": 0.0009042096219931271
+        }
+      },
+      "targeting": {
+        "locations": [],
+        "demographics": {
+          "age": "23-50"
+        },
+        "interests": []
+      }
+    }
+  ],
+  "assessment": {
+    "effectiveness": "Низкая",
+    "strengths": [
+      "Низкая стоимость клика"
+    ],
+    "weaknesses": [
+      "Низкий CTR"
+    ],
+    "recommendations": [
+      "Улучшите креативы для повышения CTR",
+      "Для цели трафика оптимизируйте по показателю CPC"
+    ]
+  }
+}

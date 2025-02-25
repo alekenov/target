@@ -1,0 +1,91 @@
+{
+  "campaign_id": "6684244739201",
+  "campaign_name": "Тюльпаны оптом - 12.02.25",
+  "objective": "OUTCOME_TRAFFIC",
+  "status": "ACTIVE",
+  "created_time": "2025-02-12T14:33:55-0800",
+  "performance": {
+    "spend": "369.59",
+    "impressions": "368383",
+    "clicks": "4361",
+    "ctr": "1.183822",
+    "cpc": "0.084749",
+    "reach": "178028",
+    "frequency": "2.069242",
+    "kpis": {
+      "ctr": 1.1838222719289435,
+      "cpc": 0.08474891080027516,
+      "frequency": 2.06924191700182,
+      "cpr": 0.0020760217493877367
+    }
+  },
+  "adsets_analysis": [
+    {
+      "adset_id": "6684244739601",
+      "adset_name": "23-50 | Широкая",
+      "status": "ACTIVE",
+      "performance": {
+        "spend": "184.83",
+        "impressions": "178837",
+        "clicks": "2502",
+        "ctr": "1.399039",
+        "cpc": "0.073873",
+        "reach": "112284",
+        "frequency": "1.59272",
+        "kpis": {
+          "ctr": 1.3990393486806423,
+          "cpc": 0.07387290167865708,
+          "frequency": 1.5927202450928004,
+          "cpr": 0.0016460938334936412
+        }
+      },
+      "targeting": {
+        "locations": [
+          "Города: Tselinograd (Akmola Region)"
+        ],
+        "demographics": {
+          "age": "23-65",
+          "gender": ""
+        },
+        "interests": []
+      }
+    },
+    {
+      "adset_id": "6684244738801",
+      "adset_name": "20-50 | Интересы",
+      "status": "ACTIVE",
+      "performance": {
+        "spend": "184.77",
+        "impressions": "189571",
+        "clicks": "1860",
+        "ctr": "0.981163",
+        "cpc": "0.099339",
+        "reach": "93835",
+        "frequency": "2.020259",
+        "kpis": {
+          "ctr": 0.9811627305864293,
+          "cpc": 0.09933870967741935,
+          "frequency": 2.020258965204881,
+          "cpr": 0.0019690946874833487
+        }
+      },
+      "targeting": {
+        "locations": [],
+        "demographics": {
+          "age": "23-50"
+        },
+        "interests": []
+      }
+    }
+  ],
+  "assessment": {
+    "effectiveness": "Средняя",
+    "strengths": [
+      "Низкая стоимость клика"
+    ],
+    "weaknesses": [],
+    "recommendations": [
+      "Для цели трафика оптимизируйте по показателю CPC"
+    ]
+  }
+}

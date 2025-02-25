@@ -1,0 +1,65 @@
+{
+  "campaign_id": "6686216478001",
+  "campaign_name": "[15.02.2025] Продвижение Отправить сообщение",
+  "objective": "MESSAGES",
+  "status": "ACTIVE",
+  "created_time": "2025-02-15T20:40:39-0800",
+  "performance": {
+    "spend": "34.51",
+    "impressions": "7435",
+    "clicks": "491",
+    "ctr": "6.6039",
+    "cpc": "0.070285",
+    "reach": "5056",
+    "frequency": "1.47053",
+    "kpis": {
+      "ctr": 6.60390047074647,
+      "cpc": 0.07028513238289205,
+      "frequency": 1.4705300632911393,
+      "cpr": 0.006825553797468354
+    }
+  },
+  "adsets_analysis": [
+    {
+      "adset_id": "6686216484001",
+      "adset_name": "[15.02.2025] Продвижение Отправить сообщение",
+      "status": "ACTIVE",
+      "performance": {
+        "spend": "34.51",
+        "impressions": "7435",
+        "clicks": "491",
+        "ctr": "6.6039",
+        "cpc": "0.070285",
+        "reach": "5056",
+        "frequency": "1.47053",
+        "kpis": {
+          "ctr": 6.60390047074647,
+          "cpc": 0.07028513238289205,
+          "frequency": 1.4705300632911393,
+          "cpr": 0.006825553797468354
+        }
+      },
+      "targeting": {
+        "locations": [
+          "Страны: KZ"
+        ],
+        "demographics": {
+          "age": "23-65",
+          "gender": ""
+        },
+        "interests": []
+      }
+    }
+  ],
+  "assessment": {
+    "effectiveness": "Высокая",
+    "strengths": [
+      "Высокий CTR",
+      "Низкая стоимость клика"
+    ],
+    "weaknesses": [],
+    "recommendations": [
+      "Для цели сообщений добавьте ясный призыв к действию"
+    ]
+  }
+}

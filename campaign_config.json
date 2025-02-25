@@ -1,0 +1,86 @@
+{
+  "campaign": {
+    "name": "Test Campaign - Roses (PAUSED)",
+    "objective": "OUTCOME_ENGAGEMENT",
+    "status": "PAUSED",
+    "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
+    "special_ad_categories": [],
+    "daily_budget": 2000
+  },
+  "ad_sets": [
+    {
+      "name": "Roses - Almaty",
+      "targeting": {
+        "geo_locations": {
+          "regions": [
+            {"key": "3159", "name": "Almaty", "country": "KZ"}
+          ],
+          "location_types": ["home", "recent"]
+        },
+        "age_min": 25,
+        "age_max": 55,
+        "genders": [1, 2]
+      },
+      "optimization_goal": "REACH",
+      "billing_event": "IMPRESSIONS",
+      "daily_budget": 1000,
+      "instagram_actor_id": "${FB_INSTAGRAM_ID}",
+      "promoted_object": {
+        "page_id": "${FB_PAGE_ID}"
+      },
+      "ads": [
+        {
+          "name": "Almaty - Red Roses",
+          "title": "Красные розы со скидкой 20%",
+          "body": "Букет из 25 красных роз премиум качества. Бесплатная доставка в день заказа.",
+          "image_url": "https://scontent.xx.fbcdn.net/v/t39.35426-6/410678619_24077470875670648_8754621078616051393_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5b7eaf&_nc_ohc=HmLq0q5HVDMAX9AQHKH&_nc_ht=scontent.xx&oh=00_AfAGXJJGVLXRSFRJ_VHDHmVEEEhwjzMgC1DQJWEw8VWKKA&oe=65C2C5B5",
+          "link": "https://flowwow.com/ru/almaty/flowers/roses/"
+        },
+        {
+          "name": "Almaty - White Roses",
+          "title": "Белые розы - идеальный подарок",
+          "body": "Букет из 25 белых роз. Свежие цветы, доставка в течение 2 часов.",
+          "image_url": "https://scontent.xx.fbcdn.net/v/t39.35426-6/410678619_24077470875670648_8754621078616051393_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5b7eaf&_nc_ohc=HmLq0q5HVDMAX9AQHKH&_nc_ht=scontent.xx&oh=00_AfAGXJJGVLXRSFRJ_VHDHmVEEEhwjzMgC1DQJWEw8VWKKA&oe=65C2C5B5",
+          "link": "https://flowwow.com/ru/almaty/flowers/roses/"
+        }
+      ]
+    },
+    {
+      "name": "Roses - Astana",
+      "targeting": {
+        "geo_locations": {
+          "regions": [
+            {"key": "3158", "name": "Astana", "country": "KZ"}
+          ],
+          "location_types": ["home", "recent"]
+        },
+        "age_min": 25,
+        "age_max": 55,
+        "genders": [1, 2]
+      },
+      "optimization_goal": "REACH",
+      "billing_event": "IMPRESSIONS",
+      "daily_budget": 800,
+      "instagram_actor_id": "${FB_INSTAGRAM_ID}",
+      "promoted_object": {
+        "page_id": "${FB_PAGE_ID}"
+      },
+      "ads": [
+        {
+          "name": "Astana - Red Roses",
+          "title": "Красные розы со скидкой 20%",
+          "body": "Букет из 25 красных роз премиум качества. Бесплатная доставка в день заказа.",
+          "image_url": "https://scontent.xx.fbcdn.net/v/t39.35426-6/410678619_24077470875670648_8754621078616051393_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5b7eaf&_nc_ohc=HmLq0q5HVDMAX9AQHKH&_nc_ht=scontent.xx&oh=00_AfAGXJJGVLXRSFRJ_VHDHmVEEEhwjzMgC1DQJWEw8VWKKA&oe=65C2C5B5",
+          "link": "https://flowwow.com/ru/almaty/flowers/roses/"
+        },
+        {
+          "name": "Astana - White Roses",
+          "title": "Белые розы - идеальный подарок",
+          "body": "Букет из 25 белых роз. Свежие цветы, доставка в течение 2 часов.",
+          "image_url": "https://scontent.xx.fbcdn.net/v/t39.35426-6/410678619_24077470875670648_8754621078616051393_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5b7eaf&_nc_ohc=HmLq0q5HVDMAX9AQHKH&_nc_ht=scontent.xx&oh=00_AfAGXJJGVLXRSFRJ_VHDHmVEEEhwjzMgC1DQJWEw8VWKKA&oe=65C2C5B5",
+          "link": "https://flowwow.com/ru/almaty/flowers/roses/"
+        }
+      ]
+    }
+  ]
+}

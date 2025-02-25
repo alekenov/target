@@ -1,0 +1,61 @@
+{
+  "campaign_id": "6694036687601",
+  "campaign_name": "Джульетта | 21.02.25",
+  "objective": "OUTCOME_ENGAGEMENT",
+  "status": "ACTIVE",
+  "created_time": "2025-02-21T05:17:13-0800",
+  "performance": {
+    "spend": "75.74",
+    "impressions": "11180",
+    "clicks": "154",
+    "ctr": "1.37746",
+    "cpc": "0.491818",
+    "reach": "5369",
+    "frequency": "2.082324",
+    "kpis": {
+      "ctr": 1.3774597495527727,
+      "cpc": 0.49181818181818177,
+      "frequency": 2.082324455205811,
+      "cpr": 0.014106910039113428
+    }
+  },
+  "adsets_analysis": [
+    {
+      "adset_id": "6694036689401",
+      "adset_name": "Интересы 23-50",
+      "status": "ACTIVE",
+      "performance": {
+        "spend": "75.74",
+        "impressions": "11180",
+        "clicks": "154",
+        "ctr": "1.37746",
+        "cpc": "0.491818",
+        "reach": "5400",
+        "frequency": "2.07037",
+        "kpis": {
+          "ctr": 1.3774597495527727,
+          "cpc": 0.49181818181818177,
+          "frequency": 2.0703703703703704,
+          "cpr": 0.014025925925925924
+        }
+      },
+      "targeting": {
+        "locations": [],
+        "demographics": {
+          "age": "23-50"
+        },
+        "interests": []
+      }
+    }
+  ],
+  "assessment": {
+    "effectiveness": "Средняя",
+    "strengths": [
+      "Низкая стоимость клика"
+    ],
+    "weaknesses": [],
+    "recommendations": [
+      "Для цели взаимодействия улучшайте креативы для повышения CTR"
+    ]
+  }
+}
