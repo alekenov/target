@@ -1,0 +1,284 @@
+{
+    "date": "2025-02-25",
+    "account_id": "act_259290474190473",
+    "total_campaigns": 362,
+    "campaigns_with_data": 3,
+    "campaigns": [
+        {
+            "impressions": "3086",
+            "clicks": "46",
+            "spend": "24.36",
+            "ctr": "1.490603",
+            "cpc": "0.529565",
+            "cpp": "11.941176",
+            "reach": "2040",
+            "frequency": "1.512745",
+            "actions": [
+                {
+                    "action_type": "onsite_conversion.total_messaging_connection",
+                    "value": "6"
+                },
+                {
+                    "action_type": "onsite_app_purchase",
+                    "value": "1"
+                },
+                {
+                    "action_type": "page_engagement",
+                    "value": "12"
+                },
+                {
+                    "action_type": "post_engagement",
+                    "value": "12"
+                },
+                {
+                    "action_type": "onsite_conversion.post_save",
+                    "value": "2"
+                },
+                {
+                    "action_type": "onsite_web_app_purchase",
+                    "value": "1"
+                },
+                {
+                    "action_type": "onsite_conversion.messaging_user_depth_3_message_send",
+                    "value": "7"
+                },
+                {
+                    "action_type": "onsite_web_purchase",
+                    "value": "1"
+                },
+                {
+                    "action_type": "onsite_conversion.messaging_first_reply",
+                    "value": "4"
+                },
+                {
+                    "action_type": "onsite_conversion.messaging_user_depth_2_message_send",
+                    "value": "8"
+                },
+                {
+                    "action_type": "onsite_conversion.purchase",
+                    "value": "1"
+                },
+                {
+                    "action_type": "onsite_conversion.messaging_conversation_started_7d",
+                    "value": "9"
+                },
+                {
+                    "action_type": "post_reaction",
+                    "value": "8"
+                },
+                {
+                    "action_type": "link_click",
+                    "value": "2"
+                },
+                {
+                    "action_type": "omni_purchase",
+                    "value": "1"
+                }
+            ],
+            "date_start": "2025-02-24",
+            "date_stop": "2025-02-25",
+            "campaign_id": "6694036687601",
+            "campaign_name": "Джульетта | 21.02.25",
+            "status": "PAUSED",
+            "budget": "Не указан",
+            "ads": [
+                {
+                    "id": "6694036687801",
+                    "name": "Creo 1",
+                    "status": "CAMPAIGN_PAUSED",
+                    "adset_id": "6694036689401",
+                    "adset_name": "Интересы 23-50",
+                    "impressions": "469",
+                    "clicks": "8",
+                    "spend": "4.55",
+                    "ctr": "1.705757",
+                    "cpc": "0.56875"
+                },
+                {
+                    "id": "6694036688801",
+                    "name": "Creo 4",
+                    "status": "CAMPAIGN_PAUSED",
+                    "adset_id": "6694036689401",
+                    "adset_name": "Интересы 23-50",
+                    "impressions": "77",
+                    "clicks": "0",
+                    "spend": "1.25",
+                    "ctr": "0"
+                },
+                {
+                    "id": "6694036688401",
+                    "name": "Creo 2",
+                    "status": "CAMPAIGN_PAUSED",
+                    "adset_id": "6694036689401",
+                    "adset_name": "Интересы 23-50",
+                    "impressions": "2398",
+                    "clicks": "38",
+                    "spend": "16.12",
+                    "ctr": "1.584654",
+                    "cpc": "0.424211"
+                },
+                {
+                    "id": "6694036689001",
+                    "name": "Creo 3",
+                    "status": "CAMPAIGN_PAUSED",
+                    "adset_id": "6694036689401",
+                    "adset_name": "Интересы 23-50",
+                    "impressions": "142",
+                    "clicks": "0",
+                    "spend": "2.44",
+                    "ctr": "0"
+                }
+            ]
+        },
+        {
+            "impressions": "48788",
+            "clicks": "598",
+            "spend": "47.26",
+            "ctr": "1.225711",
+            "cpc": "0.07903",
+            "cpp": "1.076194",
+            "reach": "43914",
+            "frequency": "1.11099",
+            "actions": [
+                {
+                    "action_type": "page_engagement",
+                    "value": "369"
+                },
+                {
+                    "action_type": "post_engagement",
+                    "value": "369"
+                },
+                {
+                    "action_type": "onsite_conversion.messaging_first_reply",
+                    "value": "8"
+                },
+                {
+                    "action_type": "post",
+                    "value": "3"
+                },
+                {
+                    "action_type": "onsite_conversion.messaging_conversation_started_7d",
+                    "value": "14"
+                },
+                {
+                    "action_type": "post_reaction",
+                    "value": "5"
+                },
+                {
+                    "action_type": "link_click",
+                    "value": "361"
+                }
+            ],
+            "date_start": "2025-02-24",
+            "date_stop": "2025-02-25",
+            "campaign_id": "6684244739201",
+            "campaign_name": "Тюльпаны оптом - 12.02.25",
+            "status": "ACTIVE",
+            "budget": "Не указан",
+            "ads": [
+                {
+                    "id": "6684244739401",
+                    "name": "Creo 1",
+                    "status": "ACTIVE",
+                    "adset_id": "6684244739601",
+                    "adset_name": "23-50 | Широкая",
+                    "impressions": "23105",
+                    "clicks": "353",
+                    "spend": "23.55",
+                    "ctr": "1.527808",
+                    "cpc": "0.066714"
+                },
+                {
+                    "id": "6684244739001",
+                    "name": "Creo 1",
+                    "status": "ACTIVE",
+                    "adset_id": "6684244738801",
+                    "adset_name": "20-50 | Интересы",
+                    "impressions": "25683",
+                    "clicks": "245",
+                    "spend": "23.71",
+                    "ctr": "0.953938",
+                    "cpc": "0.096776"
+                }
+            ]
+        },
+        {
+            "impressions": "49425",
+            "clicks": "392",
+            "spend": "47.56",
+            "ctr": "0.793121",
+            "cpc": "0.121327",
+            "cpp": "1.157234",
+            "reach": "41098",
+            "frequency": "1.202613",
+            "actions": [
+                {
+                    "action_type": "page_engagement",
+                    "value": "1127"
+                },
+                {
+                    "action_type": "post_engagement",
+                    "value": "1127"
+                },
+                {
+                    "action_type": "onsite_conversion.post_save",
+                    "value": "3"
+                },
+                {
+                    "action_type": "post",
+                    "value": "2"
+                },
+                {
+                    "action_type": "onsite_conversion.messaging_conversation_started_7d",
+                    "value": "1"
+                },
+                {
+                    "action_type": "video_view",
+                    "value": "809"
+                },
+                {
+                    "action_type": "post_reaction",
+                    "value": "7"
+                },
+                {
+                    "action_type": "link_click",
+                    "value": "306"
+                }
+            ],
+            "date_start": "2025-02-24",
+            "date_stop": "2025-02-25",
+            "campaign_id": "6683155214201",
+            "campaign_name": "Тюльпан - 11.02.25",
+            "status": "ACTIVE",
+            "budget": "Не указан",
+            "ads": [
+                {
+                    "id": "6683232683801",
+                    "name": "Creo 1",
+                    "status": "ACTIVE",
+                    "adset_id": "6683232684001",
+                    "adset_name": "23-50 | Широкая — Копия",
+                    "impressions": "25366",
+                    "clicks": "193",
+                    "spend": "23.83",
+                    "ctr": "0.760861",
+                    "cpc": "0.123472"
+                },
+                {
+                    "id": "6683155214401",
+                    "name": "Creo 1",
+                    "status": "ACTIVE",
+                    "adset_id": "6683155214601",
+                    "adset_name": "20-50 | Интересы",
+                    "impressions": "24108",
+                    "clicks": "199",
+                    "spend": "23.76",
+                    "ctr": "0.825452",
+                    "cpc": "0.119397"
+                }
+            ]
+        }
+    ],
+    "total_spend": "119.18 USD",
+    "total_impressions": 101299
+}

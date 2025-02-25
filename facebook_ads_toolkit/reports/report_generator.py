@@ -1,627 +1,762 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 """
-Модуль генерации различных типов отчетов для Facebook Ads Toolkit.
-Поддерживает создание и кастомизацию различных типов отчетов с экспортом в различные форматы.
+Модуль для генерации отчетов о рекламных кампаниях Facebook.
+
+Этот модуль содержит функции для получения данных о кампаниях,
+их анализа и формирования отчетов.
 """
 
 import os
 import logging
-import json
-from typing import Dict, List, Any, Optional, Union, Callable
+import random
+import traceback
 from datetime import datetime, timedelta
-from abc import ABC, abstractmethod
-import csv
+from typing import Dict, List, Any, Optional, Union
+import json
+import requests
 
-from ..utils.data_handlers import format_currency, format_number
-from ..analysis.ad_analyzer import AdAnalyzer
-from ..analysis.data_fetchers import AdDataFetcher
+from facebook_business.api import FacebookAdsApi
+from facebook_business.adobjects.adaccount import AdAccount
+from facebook_business.adobjects.campaign import Campaign
+from facebook_business.adobjects.adset import AdSet
+from facebook_business.adobjects.ad import Ad
 
+from facebook_ads_toolkit.auth.facebook_auth import FacebookAuth, get_api, get_ad_account
+
+# Настройка логирования
 logger = logging.getLogger(__name__)
 
-class ReportTemplate(ABC):
-    """Абстрактный базовый класс для всех шаблонов отчетов."""
+def get_campaigns_list(campaign_id=None, status=None, fields=None):
+    """
+    Получает список кампаний из рекламного аккаунта Facebook.
     
-    def __init__(self, title: str, description: str):
-        """
-        Инициализация шаблона отчета.
+    Args:
+        campaign_id (str, optional): ID кампании для фильтрации.
+        status (str, optional): Статус кампаний для фильтрации (ACTIVE, PAUSED, и т.д.).
+        fields (list, optional): Список полей для запроса.
         
-        Args:
-            title: Заголовок отчета
-            description: Описание отчета
-        """
-        self.title = title
-        self.description = description
-        self.created_at = datetime.now()
-        self.sections = []
+    Returns:
+        list: Список объектов кампаний.
+    """
+    try:
+        # Получаем API и аккаунт
+        api = get_api()
+        account = get_ad_account()
         
-    @abstractmethod
-    def generate(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Генерация отчета на основе предоставленных данных.
+        account_id = account['id']
+        logger.info(f"Используется аккаунт: {account_id}")
         
-        Args:
-            data: Данные для генерации отчета
-            
-        Returns:
-            Dict[str, Any]: Сгенерированный отчет
-        """
-        pass
-    
-    def add_section(self, section: 'ReportSection'):
-        """
-        Добавление секции в отчет.
+        # Настраиваем параметры запроса
+        if fields is None:
+            fields = [
+                'id', 'name', 'status', 'objective', 
+                'created_time', 'start_time', 'stop_time',
+                'daily_budget', 'lifetime_budget',
+                'effective_status'
+            ]
         
-        Args:
-            section: Секция отчета
-        """
-        self.sections.append(section)
-
-
-class ReportSection:
-    """Класс для представления секции отчета."""
-    
-    def __init__(self, title: str, content_generator: Callable[[Dict[str, Any]], Any]):
-        """
-        Инициализация секции отчета.
-        
-        Args:
-            title: Заголовок секции
-            content_generator: Функция для генерации содержимого секции
-        """
-        self.title = title
-        self.content_generator = content_generator
-        
-    def generate_content(self, data: Dict[str, Any]) -> Any:
-        """
-        Генерация содержимого секции.
-        
-        Args:
-            data: Данные для генерации содержимого
-            
-        Returns:
-            Any: Сгенерированное содержимое
-        """
-        return self.content_generator(data)
-
-
-class ReportFormat(ABC):
-    """Абстрактный базовый класс для всех форматов отчетов."""
-    
-    @abstractmethod
-    def export(self, report_data: Dict[str, Any], file_path: str) -> str:
-        """
-        Экспорт отчета в файл.
-        
-        Args:
-            report_data: Данные отчета
-            file_path: Путь к файлу для сохранения
-            
-        Returns:
-            str: Путь к созданному файлу
-        """
-        pass
-
-
-class CampaignPerformanceReport(ReportTemplate):
-    """Шаблон отчета о производительности рекламных кампаний."""
-    
-    def __init__(self):
-        """Инициализация шаблона отчета о производительности кампаний."""
-        super().__init__(
-            "Отчет о производительности рекламных кампаний",
-            "Подробный анализ эффективности рекламных кампаний, включая метрики, тенденции и рекомендации."
-        )
-        
-        # Добавляем стандартные секции отчета
-        self.add_section(ReportSection("Общая статистика", self._generate_overall_stats))
-        self.add_section(ReportSection("Статистика по кампаниям", self._generate_campaign_stats))
-        self.add_section(ReportSection("Динамика показателей", self._generate_metrics_trends))
-        self.add_section(ReportSection("Рекомендации", self._generate_recommendations))
-        
-    def generate(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Генерация отчета о производительности кампаний.
-        
-        Args:
-            data: Данные для генерации отчета
-            
-        Returns:
-            Dict[str, Any]: Сгенерированный отчет
-        """
-        report = {
-            "title": self.title,
-            "description": self.description,
-            "generated_at": self.created_at.isoformat(),
-            "time_range": data.get("time_range", {}),
-            "sections": {}
+        params = {
+            'fields': fields
         }
         
-        # Генерируем содержимое каждой секции
-        for section in self.sections:
-            report["sections"][section.title] = section.generate_content(data)
+        # Добавляем фильтрацию по статусу, если указан
+        if status:
+            params['filtering'] = [
+                {
+                    'field': 'effective_status',
+                    'operator': 'EQUAL',
+                    'value': status
+                }
+            ]
         
-        return report
-    
-    def _generate_overall_stats(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Генерация общей статистики."""
-        metrics = data.get("metrics", {})
+        # Добавляем фильтрацию по ID кампании, если указан
+        if campaign_id:
+            params['filtering'] = params.get('filtering', [])
+            params['filtering'].append({
+                'field': 'id',
+                'operator': 'EQUAL',
+                'value': campaign_id
+            })
         
-        return {
-            "active_campaigns": metrics.get("active_campaigns", 0),
-            "total_campaigns": metrics.get("total_campaigns", 0),
-            "active_adsets": metrics.get("active_adsets", 0), 
-            "total_adsets": metrics.get("total_adsets", 0),
-            "active_ads": metrics.get("active_ads", 0),
-            "total_ads": metrics.get("total_ads", 0),
-            "total_spend": metrics.get("total_spend", 0),
-            "total_impressions": metrics.get("total_impressions", 0),
-            "total_clicks": metrics.get("total_clicks", 0),
-            "avg_ctr": metrics.get("avg_ctr", 0),
-            "avg_cpc": metrics.get("avg_cpc", 0)
-        }
-    
-    def _generate_campaign_stats(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Генерация статистики по кампаниям."""
-        campaign_performance = data.get("campaign_performance", {})
+        logger.info(f"Параметры запроса: {params}")
         
-        return {
-            "top_campaigns_by_ctr": campaign_performance.get("top_campaigns_by_ctr", []),
-            "top_campaigns_by_spend": campaign_performance.get("top_campaigns_by_spend", []),
-            "underperforming_campaigns": campaign_performance.get("underperforming_campaigns", [])
-        }
-    
-    def _generate_metrics_trends(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Генерация трендов метрик."""
-        trends = data.get("trends", {})
+        # Получаем токен доступа для логирования
+        access_token = os.environ.get('FACEBOOK_ACCESS_TOKEN', '')
+        token_preview = access_token[:10] + '...' if len(access_token) > 10 else access_token
+        logger.info(f"Используется токен доступа: {token_preview} (первые 10 символов)")
         
-        # Если трендов нет в данных, возвращаем пустой словарь
-        if not trends:
-            return {}
-        
-        return {
-            "spend_trend": trends.get("spend_trend", []),
-            "ctr_trend": trends.get("ctr_trend", []),
-            "cpc_trend": trends.get("cpc_trend", [])
-        }
-    
-    def _generate_recommendations(self, data: Dict[str, Any]) -> List[str]:
-        """Генерация рекомендаций."""
-        recommendations = []
-        
-        # Анализ данных для формирования рекомендаций
-        campaign_performance = data.get("campaign_performance", {})
-        ad_performance = data.get("ad_performance", {})
-        
-        # Рекомендации для лучших кампаний
-        top_campaigns = campaign_performance.get("top_campaigns_by_ctr", [])
-        if top_campaigns:
-            best_campaign = top_campaigns[0]
-            recommendations.append(
-                f"Рассмотрите увеличение бюджета для кампании \"{best_campaign.get('name', '')}\", "
-                f"так как она показывает наилучший CTR ({best_campaign.get('ctr', 0):.2f}%)."
-            )
-        
-        # Рекомендации для худших объявлений
-        underperforming_ads = ad_performance.get("underperforming_ads", [])
-        if underperforming_ads:
-            worst_ad = underperforming_ads[0]
-            recommendations.append(
-                f"Рассмотрите остановку или оптимизацию объявления \"{worst_ad.get('name', '')}\", "
-                f"так как оно показывает низкий CTR ({worst_ad.get('ctr', 0):.2f}%) "
-                f"при достаточном количестве показов ({worst_ad.get('impressions', 0):,})."
-            )
-        
-        # Общие рекомендации
-        recommendations.append("Регулярно проверяйте производительность рекламы и корректируйте стратегии.")
-        recommendations.append("Тестируйте различные варианты креативов и таргетирования для улучшения результатов.")
-        
-        return recommendations
-
-
-class AdComparisonReport(ReportTemplate):
-    """Шаблон отчета для сравнения рекламных объявлений."""
-    
-    def __init__(self):
-        """Инициализация шаблона отчета для сравнения объявлений."""
-        super().__init__(
-            "Сравнительный анализ рекламных объявлений",
-            "Детальное сравнение эффективности различных рекламных объявлений."
-        )
-        
-        # Добавляем секции для отчета
-        self.add_section(ReportSection("Сравнение основных метрик", self._generate_metrics_comparison))
-        self.add_section(ReportSection("Сравнение по времени суток", self._generate_time_of_day_comparison))
-        self.add_section(ReportSection("Сравнение по дням недели", self._generate_day_of_week_comparison))
-        self.add_section(ReportSection("Выводы", self._generate_conclusions))
-    
-    def generate(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Генерация отчета для сравнения объявлений.
-        
-        Args:
-            data: Данные для генерации отчета
+        # Прямой запрос через requests
+        try:
+            logger.info(f"Выполняем запрос к аккаунту {account_id}")
             
-        Returns:
-            Dict[str, Any]: Сгенерированный отчет
-        """
-        report = {
-            "title": self.title,
-            "description": self.description,
-            "generated_at": self.created_at.isoformat(),
-            "time_range": data.get("time_range", {}),
-            "ads_compared": [ad.get("name", "Неизвестное объявление") for ad in data.get("ads", [])],
-            "sections": {}
-        }
-        
-        # Генерируем содержимое каждой секции
-        for section in self.sections:
-            report["sections"][section.title] = section.generate_content(data)
-        
-        return report
-    
-    def _generate_metrics_comparison(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Генерация сравнения основных метрик."""
-        ads = data.get("ads", [])
-        
-        result = {}
-        for ad in ads:
-            ad_id = ad.get("id", "unknown")
-            result[ad_id] = {
-                "name": ad.get("name", "Неизвестное объявление"),
-                "impressions": ad.get("impressions", 0),
-                "clicks": ad.get("clicks", 0),
-                "ctr": ad.get("ctr", 0),
-                "cpc": ad.get("cpc", 0),
-                "spend": ad.get("spend", 0)
+            # Формируем URL для запроса
+            api_version = '21.0'  # Используем текущую версию API
+            base_url = f"https://graph.facebook.com/v{api_version}"
+            endpoint = f"{base_url}/{account_id}/campaigns"
+            
+            # Подготавливаем параметры запроса
+            request_params = {
+                'access_token': access_token,
+                'fields': ','.join(params['fields'])
             }
-        
-        return result
-    
-    def _generate_time_of_day_comparison(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Генерация сравнения по времени суток."""
-        ads = data.get("ads", [])
-        
-        result = {}
-        for ad in ads:
-            ad_id = ad.get("id", "unknown")
-            hourly_data = ad.get("hourly_performance", {})
             
-            if hourly_data:
-                result[ad_id] = {
-                    "name": ad.get("name", "Неизвестное объявление"),
-                    "hourly_data": hourly_data
-                }
-        
-        return result
-    
-    def _generate_day_of_week_comparison(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Генерация сравнения по дням недели."""
-        ads = data.get("ads", [])
-        
-        result = {}
-        for ad in ads:
-            ad_id = ad.get("id", "unknown")
-            daily_data = ad.get("daily_performance", {})
+            # Добавляем фильтрацию, если есть
+            if 'filtering' in params:
+                request_params['filtering'] = json.dumps(params['filtering'])
             
-            if daily_data:
-                result[ad_id] = {
-                    "name": ad.get("name", "Неизвестное объявление"),
-                    "daily_data": daily_data
-                }
-        
-        return result
-    
-    def _generate_conclusions(self, data: Dict[str, Any]) -> List[str]:
-        """Генерация выводов на основе сравнения."""
-        conclusions = []
-        ads = data.get("ads", [])
-        
-        if len(ads) < 2:
-            conclusions.append("Недостаточно данных для сравнения объявлений.")
-            return conclusions
-        
-        # Определение лучшего объявления по CTR
-        best_ctr_ad = max(ads, key=lambda ad: ad.get("ctr", 0))
-        worst_ctr_ad = min(ads, key=lambda ad: ad.get("ctr", 0))
-        
-        if best_ctr_ad and worst_ctr_ad:
-            conclusions.append(
-                f"Объявление \"{best_ctr_ad.get('name', '')}\" показывает на "
-                f"{(best_ctr_ad.get('ctr', 0) - worst_ctr_ad.get('ctr', 0)):.2f}% "
-                f"лучший CTR, чем \"{worst_ctr_ad.get('name', '')}\"."
-            )
-        
-        # Определение наиболее экономичного объявления по CPC
-        best_cpc_ad = min(ads, key=lambda ad: ad.get("cpc", float('inf')) or float('inf'))
-        worst_cpc_ad = max(ads, key=lambda ad: ad.get("cpc", 0))
-        
-        if best_cpc_ad and worst_cpc_ad and best_cpc_ad.get("cpc") and worst_cpc_ad.get("cpc"):
-            conclusions.append(
-                f"Объявление \"{best_cpc_ad.get('name', '')}\" имеет на "
-                f"{format_currency(worst_cpc_ad.get('cpc', 0) - best_cpc_ad.get('cpc', 0))} "
-                f"меньшую стоимость клика, чем \"{worst_cpc_ad.get('name', '')}\"."
-            )
-        
-        # Общие выводы
-        conclusions.append("Рекомендуется переназначить бюджет в пользу более эффективных объявлений.")
-        conclusions.append("Рассмотрите возможность адаптации креативов менее эффективных объявлений по образцу более успешных.")
-        
-        return conclusions
-
-
-class JsonReportFormat(ReportFormat):
-    """Класс для экспорта отчетов в формате JSON."""
-    
-    def export(self, report_data: Dict[str, Any], file_path: str) -> str:
-        """
-        Экспорт отчета в формате JSON.
-        
-        Args:
-            report_data: Данные отчета
-            file_path: Путь к файлу для сохранения
+            # Выполняем запрос
+            logger.info(f"URL запроса: {endpoint}")
+            logger.info(f"Параметры запроса: {request_params}")
             
-        Returns:
-            str: Путь к созданному файлу
-        """
-        try:
-            # Убедимся, что директория существует
-            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            response = requests.get(endpoint, params=request_params)
             
-            # Записываем данные в JSON-файл
-            with open(file_path, 'w', encoding='utf-8') as f:
-                json.dump(report_data, f, ensure_ascii=False, indent=2)
+            # Логируем информацию о запросе
+            logger.info(f"Статус ответа API: {response.status_code}")
+            logger.info(f"Заголовки ответа: {response.headers}")
             
-            logger.info(f"Отчет успешно экспортирован в JSON: {file_path}")
-            return file_path
-            
-        except Exception as e:
-            logger.error(f"Ошибка при экспорте отчета в JSON: {str(e)}")
-            raise
-
-
-class TextReportFormat(ReportFormat):
-    """Класс для экспорта отчетов в текстовом формате."""
-    
-    def export(self, report_data: Dict[str, Any], file_path: str) -> str:
-        """
-        Экспорт отчета в текстовом формате.
-        
-        Args:
-            report_data: Данные отчета
-            file_path: Путь к файлу для сохранения
-            
-        Returns:
-            str: Путь к созданному файлу
-        """
-        try:
-            # Убедимся, что директория существует
-            os.makedirs(os.path.dirname(file_path), exist_ok=True)
-            
-            # Формируем содержимое отчета
-            with open(file_path, 'w', encoding='utf-8') as f:
-                f.write("=" * 70 + "\n")
-                f.write(f"{report_data.get('title', 'Отчет').upper():^70}\n")
-                f.write("=" * 70 + "\n\n")
-                
-                # Добавляем описание
-                f.write(f"{report_data.get('description', '')}\n\n")
-                
-                # Добавляем информацию о времени генерации и периоде анализа
-                f.write(f"Дата генерации: {datetime.fromisoformat(report_data.get('generated_at')).strftime('%Y-%m-%d %H:%M:%S')}\n")
-                
-                time_range = report_data.get('time_range', {})
-                if time_range:
-                    f.write(f"Период анализа: {time_range.get('since', 'н/д')} - {time_range.get('until', 'н/д')}\n")
-                
-                f.write("\n" + "=" * 70 + "\n\n")
-                
-                # Добавляем содержимое секций
-                sections = report_data.get('sections', {})
-                for section_title, section_content in sections.items():
-                    f.write(f"=== {section_title.upper()} ===\n\n")
-                    
-                    # Обработка разных типов содержимого
-                    if isinstance(section_content, dict):
-                        for key, value in section_content.items():
-                            if isinstance(value, dict):
-                                f.write(f"{value.get('name', key)}:\n")
-                                for k, v in value.items():
-                                    if k != 'name':
-                                        if isinstance(v, float):
-                                            f.write(f"   {k}: {v:.2f}\n")
-                                        else:
-                                            f.write(f"   {k}: {v}\n")
-                                f.write("\n")
-                            else:
-                                f.write(f"{key}: {value}\n")
-                    elif isinstance(section_content, list):
-                        for i, item in enumerate(section_content, 1):
-                            if isinstance(item, str):
-                                f.write(f"{i}. {item}\n")
-                            elif isinstance(item, dict):
-                                f.write(f"{i}. {item.get('name', 'Элемент ' + str(i))}\n")
-                                for k, v in item.items():
-                                    if k != 'name':
-                                        if isinstance(v, float):
-                                            f.write(f"   {k}: {v:.2f}\n")
-                                        else:
-                                            f.write(f"   {k}: {v}\n")
-                            f.write("\n")
+            # Проверяем статус ответа
+            if response.status_code == 200:
+                try:
+                    data = response.json()
+                    logger.info(f"Ответ API: {data}")
+                    if 'data' in data and len(data['data']) > 0:
+                        logger.info(f"Получено кампаний: {len(data['data'])}")
+                        # Преобразуем данные в объекты Campaign
+                        campaigns = []
+                        for campaign_data in data['data']:
+                            campaign = Campaign(campaign_data['id'])
+                            for key, value in campaign_data.items():
+                                campaign[key] = value
+                            campaigns.append(campaign)
+                        return campaigns
                     else:
-                        f.write(f"{section_content}\n")
-                    
-                    f.write("\n" + "-" * 50 + "\n\n")
-                
-                f.write("=" * 70 + "\n")
-                f.write("КОНЕЦ ОТЧЕТА".center(70) + "\n")
-                f.write("=" * 70 + "\n")
-            
-            logger.info(f"Отчет успешно экспортирован в текстовом формате: {file_path}")
-            return file_path
-            
-        except Exception as e:
-            logger.error(f"Ошибка при экспорте отчета в текстовом формате: {str(e)}")
-            raise
-
-
-class CsvReportFormat(ReportFormat):
-    """Класс для экспорта отчетов в формате CSV."""
-    
-    def export(self, report_data: Dict[str, Any], file_path: str) -> str:
-        """
-        Экспорт отчета в формате CSV.
-        
-        Args:
-            report_data: Данные отчета
-            file_path: Путь к файлу для сохранения
-            
-        Returns:
-            str: Путь к созданному файлу
-        """
-        try:
-            # Убедимся, что директория существует
-            os.makedirs(os.path.dirname(file_path), exist_ok=True)
-            
-            # Подготавливаем данные для CSV
-            csv_data = []
-            headers = []
-            
-            # Определяем, какие данные экспортировать
-            if "title" in report_data and report_data["title"] == "Отчет о производительности рекламных кампаний":
-                # Для отчета о производительности кампаний
-                if "sections" in report_data and "Статистика по кампаниям" in report_data["sections"]:
-                    campaign_stats = report_data["sections"]["Статистика по кампаниям"]
-                    top_campaigns = campaign_stats.get("top_campaigns_by_ctr", [])
-                    
-                    if top_campaigns:
-                        # Определяем заголовки
-                        headers = ["Кампания", "Расходы", "Показы", "Клики", "CTR", "CPC"]
-                        
-                        # Заполняем данные
-                        for campaign in top_campaigns:
-                            row = [
-                                campaign.get("name", ""),
-                                format_currency(campaign.get("spend", 0)),
-                                format_number(campaign.get("impressions", 0)),
-                                format_number(campaign.get("clicks", 0)),
-                                f"{campaign.get('ctr', 0):.2f}%",
-                                format_currency(campaign.get("cpc", 0))
-                            ]
-                            csv_data.append(row)
-            
-            elif "title" in report_data and report_data["title"] == "Сравнительный анализ рекламных объявлений":
-                # Для отчета сравнения объявлений
-                if "sections" in report_data and "Сравнение основных метрик" in report_data["sections"]:
-                    metrics_comparison = report_data["sections"]["Сравнение основных метрик"]
-                    
-                    if metrics_comparison:
-                        # Определяем заголовки
-                        headers = ["Объявление", "Расходы", "Показы", "Клики", "CTR", "CPC"]
-                        
-                        # Заполняем данные
-                        for ad_id, ad_data in metrics_comparison.items():
-                            row = [
-                                ad_data.get("name", ""),
-                                format_currency(ad_data.get("spend", 0)),
-                                format_number(ad_data.get("impressions", 0)),
-                                format_number(ad_data.get("clicks", 0)),
-                                f"{ad_data.get('ctr', 0):.2f}%",
-                                format_currency(ad_data.get("cpc", 0))
-                            ]
-                            csv_data.append(row)
-            
-            # Записываем данные в CSV-файл
-            if headers and csv_data:
-                with open(file_path, 'w', encoding='utf-8', newline='') as f:
-                    writer = csv.writer(f)
-                    writer.writerow(headers)
-                    writer.writerows(csv_data)
-                
-                logger.info(f"Отчет успешно экспортирован в CSV: {file_path}")
-                return file_path
+                        logger.warning("API вернул пустой список кампаний")
+                        logger.info(f"Полный ответ API: {data}")
+                        return []
+                except json.JSONDecodeError as e:
+                    logger.error(f"Ошибка декодирования JSON: {str(e)}")
+                    logger.info(f"Текст ответа: {response.text}")
             else:
-                logger.warning(f"Нет данных для экспорта в CSV: {file_path}")
-                return ""
-            
+                logger.error(f"Ошибка API: {response.status_code}")
+                logger.info(f"Текст ответа: {response.text}")
+        
         except Exception as e:
-            logger.error(f"Ошибка при экспорте отчета в CSV: {str(e)}")
-            raise
-
-
-class ReportManager:
-    """Класс для управления отчетами и их экспортом."""
-    
-    def __init__(self, output_dir: str = "reports"):
-        """
-        Инициализация менеджера отчетов.
+            logger.error(f"Ошибка при прямом запросе к API: {str(e)}")
+            logger.error(f"Тип ошибки: {type(e).__name__}")
+            logger.error(f"Стек вызовов: {traceback.format_exc()}")
         
-        Args:
-            output_dir: Директория для сохранения отчетов
-        """
-        self.output_dir = output_dir
+        # Если прямой запрос не удался, пробуем через SDK
+        logger.info("Пробуем запрос через SDK Facebook")
         
-        # Создаем директорию для отчетов, если она не существует
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        
-        # Регистрируем доступные шаблоны отчетов
-        self.report_templates = {
-            "campaign_performance": CampaignPerformanceReport(),
-            "ad_comparison": AdComparisonReport()
+        # Для SDK используем другой формат параметров
+        sdk_params = {
+            'fields': params['fields']
         }
         
-        # Регистрируем доступные форматы экспорта
-        self.export_formats = {
-            "json": JsonReportFormat(),
-            "txt": TextReportFormat(),
-            "csv": CsvReportFormat()
-        }
-    
-    def generate_report(self, 
-                       template_name: str, 
-                       data: Dict[str, Any], 
-                       export_formats: List[str] = ["json"],
-                       custom_filename: Optional[str] = None) -> Dict[str, str]:
-        """
-        Генерация отчета и его экспорт в указанные форматы.
+        # Для SDK используем другой формат фильтрации
+        if status:
+            sdk_params['effective_status'] = [status]
         
-        Args:
-            template_name: Имя шаблона отчета
-            data: Данные для генерации отчета
-            export_formats: Форматы для экспорта отчета
-            custom_filename: Пользовательское имя файла
+        if campaign_id:
+            sdk_params['id'] = campaign_id
             
-        Returns:
-            Dict[str, str]: Словарь с путями к созданным файлам
-        """
-        # Проверяем существование шаблона
-        if template_name not in self.report_templates:
-            raise ValueError(f"Шаблон отчета '{template_name}' не найден")
+        logger.info(f"Параметры SDK запроса: {sdk_params}")
         
-        # Генерируем отчет
-        report_template = self.report_templates[template_name]
-        report_data = report_template.generate(data)
+        campaigns = account.get_campaigns(params=sdk_params)
+        return campaigns
         
-        # Формируем базовое имя файла
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        if custom_filename:
-            base_filename = f"{custom_filename}"
+    except Exception as e:
+        logger.error(f"Ошибка при запросе к API: {str(e)}")
+        logger.error(f"Тип ошибки: {type(e).__name__}")
+        logger.error(f"Стек вызовов: {traceback.format_exc()}")
+        return []
+
+def get_campaign_data(campaign_id: str = None, days: int = 30, status: str = 'ACTIVE', date_preset: str = None, fields: List[str] = None) -> Optional[Dict[str, Any]]:
+    """
+    Получение данных о кампаниях.
+    
+    Args:
+        campaign_id (str, optional): ID конкретной кампании. Если None, возвращаются данные по всем кампаниям.
+        days (int): Количество дней для анализа.
+        status (str): Статус кампаний для получения (ACTIVE, PAUSED, ALL).
+        date_preset (str, optional): Предустановленный период (yesterday, last_7_days, last_30_days).
+        fields (List[str], optional): Список полей для получения.
+        
+    Returns:
+        dict: Словарь с данными о кампании или None в случае ошибки.
+    """
+    try:
+        # Инициализация API
+        auth = FacebookAuth()
+        auth.initialize()  # Важно вызвать initialize перед использованием API
+        api = auth.get_api()
+        
+        # Если запрашивается конкретная кампания
+        if campaign_id:
+            # Получаем кампанию
+            campaign = Campaign(campaign_id)
+            
+            # Получаем основные данные о кампании
+            campaign_data = campaign.api_get(fields=[
+                'id',
+                'name',
+                'status',
+                'objective',
+                'created_time',
+                'start_time',
+                'stop_time',
+                'daily_budget',
+                'lifetime_budget',
+                'targeting'
+            ])
+            
+            # Определяем бюджет
+            budget = 0
+            if 'daily_budget' in campaign_data:
+                budget = float(campaign_data['daily_budget']) / 100  # Конвертируем из центов в доллары
+            elif 'lifetime_budget' in campaign_data:
+                budget = float(campaign_data['lifetime_budget']) / 100
+            
+            # Получаем статистику
+            end_date = datetime.now()
+            start_date = end_date - timedelta(days=days)
+            
+            insights = campaign.get_insights(
+                fields=[
+                    'impressions',
+                    'clicks',
+                    'ctr',
+                    'cpc',
+                    'spend',
+                    'actions'
+                ],
+                params={
+                    'time_range': {
+                        'since': start_date.strftime('%Y-%m-%d'),
+                        'until': end_date.strftime('%Y-%m-%d')
+                    },
+                    'time_increment': 1
+                }
+            )
+            
+            # Обрабатываем статистику
+            total_impressions = 0
+            total_clicks = 0
+            total_spend = 0
+            total_conversions = 0
+            daily_stats = []
+            
+            for day_data in insights:
+                impressions = int(day_data.get('impressions', 0))
+                clicks = int(day_data.get('clicks', 0))
+                spend = float(day_data.get('spend', 0))
+                ctr = float(day_data.get('ctr', 0)) * 100  # Конвертируем в проценты
+                cpc = float(day_data.get('cpc', 0))
+                
+                # Получаем конверсии из actions
+                conversions = 0
+                if 'actions' in day_data:
+                    for action in day_data['actions']:
+                        if action['action_type'] in ['offsite_conversion', 'lead', 'purchase']:
+                            conversions += int(action['value'])
+                
+                # Добавляем данные за день
+                daily_stats.append({
+                    'date': day_data.get('date_start'),
+                    'impressions': impressions,
+                    'clicks': clicks,
+                    'spend': spend,
+                    'ctr': ctr,
+                    'cpc': cpc,
+                    'conversions': conversions
+                })
+                
+                # Суммируем общие показатели
+                total_impressions += impressions
+                total_clicks += clicks
+                total_spend += spend
+                total_conversions += conversions
+            
+            # Рассчитываем общие метрики
+            total_ctr = (total_clicks / total_impressions * 100) if total_impressions > 0 else 0
+            total_cpc = (total_spend / total_clicks) if total_clicks > 0 else 0
+            total_cost_per_conversion = (total_spend / total_conversions) if total_conversions > 0 else 0
+            
+            # Формируем краткое описание таргетинга
+            targeting_summary = "Не указано"
+            if 'targeting' in campaign_data:
+                targeting = campaign_data['targeting']
+                targeting_parts = []
+                
+                if 'geo_locations' in targeting:
+                    countries = targeting['geo_locations'].get('countries', [])
+                    if countries:
+                        targeting_parts.append(f"Страны: {', '.join(countries)}")
+                
+                if 'age_min' in targeting and 'age_max' in targeting:
+                    targeting_parts.append(f"Возраст: {targeting['age_min']}-{targeting['age_max']}")
+                
+                if 'genders' in targeting:
+                    genders = {1: 'М', 2: 'Ж'}
+                    gender_list = [genders.get(g, str(g)) for g in targeting['genders']]
+                    targeting_parts.append(f"Пол: {', '.join(gender_list)}")
+                
+                if targeting_parts:
+                    targeting_summary = "; ".join(targeting_parts)
+            
+            # Формируем результат
+            return {
+                'id': campaign_data['id'],
+                'name': campaign_data['name'],
+                'status': campaign_data['status'],
+                'objective': campaign_data.get('objective', 'Не указано'),
+                'created_time': campaign_data.get('created_time', 'Не указано'),
+                'start_time': campaign_data.get('start_time', 'Не указано'),
+                'stop_time': campaign_data.get('stop_time', 'Не указано'),
+                'budget': budget,
+                'targeting': targeting_summary,
+                'metrics': {
+                    'impressions': total_impressions,
+                    'clicks': total_clicks,
+                    'ctr': total_ctr,
+                    'cpc': total_cpc,
+                    'spend': total_spend,
+                    'conversions': total_conversions,
+                    'cost_per_conversion': total_cost_per_conversion
+                },
+                'daily_stats': daily_stats
+            }
         else:
-            base_filename = f"{template_name}_report_{timestamp}"
+            # Получаем список кампаний
+            campaigns_list = get_campaigns_list(status=status)
+            
+            # Если нужны дополнительные данные для каждой кампании
+            if fields:
+                result = []
+                for campaign in campaigns_list:
+                    campaign_id = campaign['id']
+                    # Получаем метрики для кампании
+                    campaign_metrics = {}
+                    
+                    # Получаем статистику
+                    try:
+                        campaign_obj = Campaign(campaign_id)
+                        end_date = datetime.now()
+                        start_date = end_date - timedelta(days=days)
+                        
+                        # Определяем период на основе date_preset
+                        params = {}
+                        if date_preset:
+                            params['date_preset'] = date_preset
+                        else:
+                            params['time_range'] = {
+                                'since': start_date.strftime('%Y-%m-%d'),
+                                'until': end_date.strftime('%Y-%m-%d')
+                            }
+                        
+                        insights = campaign_obj.get_insights(
+                            fields=[
+                                'impressions',
+                                'clicks',
+                                'ctr',
+                                'cpc',
+                                'spend',
+                                'actions'
+                            ],
+                            params=params
+                        )
+                        
+                        if insights:
+                            insight = insights[0]  # Берем первый элемент, так как без time_increment возвращается один элемент
+                            
+                            impressions = int(insight.get('impressions', 0))
+                            clicks = int(insight.get('clicks', 0))
+                            spend = float(insight.get('spend', 0))
+                            ctr = float(insight.get('ctr', 0)) * 100  # Конвертируем в проценты
+                            cpc = float(insight.get('cpc', 0))
+                            
+                            # Получаем конверсии из actions
+                            conversions = 0
+                            if 'actions' in insight:
+                                for action in insight['actions']:
+                                    if action['action_type'] in ['offsite_conversion', 'lead', 'purchase']:
+                                        conversions += int(action['value'])
+                            
+                            campaign_metrics = {
+                                'impressions': impressions,
+                                'clicks': clicks,
+                                'ctr': ctr,
+                                'cpc': cpc,
+                                'spend': spend,
+                                'conversions': conversions
+                            }
+                    except Exception as e:
+                        logger.error(f"Ошибка при получении метрик для кампании {campaign_id}: {e}")
+                    
+                    # Добавляем метрики к данным о кампании
+                    campaign['metrics'] = campaign_metrics
+                    result.append(campaign)
+                
+                return result
+            
+            return campaigns_list
+    
+    except Exception as e:
+        logger.error(f"Ошибка при получении данных о кампании {campaign_id}: {e}")
+        logger.info("Попытка повторного подключения к Facebook API...")
         
-        # Экспортируем отчет в указанные форматы
-        exported_files = {}
-        for format_name in export_formats:
-            if format_name not in self.export_formats:
-                logger.warning(f"Формат экспорта '{format_name}' не поддерживается, пропускаем")
-                continue
+        try:
+            # Повторная инициализация API с обновленным токеном
+            auth = FacebookAuth()
+            auth.initialize()  # Убран параметр force_refresh
             
-            file_path = os.path.join(self.output_dir, f"{base_filename}.{format_name}")
-            export_format = self.export_formats[format_name]
+            # Повторяем запрос (упрощенный вариант для повторной попытки)
+            if campaign_id:
+                campaign = Campaign(campaign_id)
+                campaign_data = campaign.api_get(fields=['id', 'name', 'status', 'objective', 'daily_budget', 'lifetime_budget'])
+                
+                # Определяем бюджет
+                budget = 0
+                if 'daily_budget' in campaign_data:
+                    budget = float(campaign_data['daily_budget']) / 100  # Конвертируем из центов в доллары
+                elif 'lifetime_budget' in campaign_data:
+                    budget = float(campaign_data['lifetime_budget']) / 100
+                
+                return {
+                    'id': campaign_data['id'],
+                    'name': campaign_data['name'],
+                    'status': campaign_data['status'],
+                    'objective': campaign_data.get('objective', 'Не указано'),
+                    'budget': budget,
+                    'metrics': {
+                        'impressions': 0,
+                        'clicks': 0,
+                        'ctr': 0,
+                        'cpc': 0,
+                        'spend': 0,
+                        'conversions': 0,
+                        'cost_per_conversion': 0
+                    }
+                }
+            else:
+                return get_campaigns_list(status=status)
+                
+        except Exception as e2:
+            logger.error(f"Повторная ошибка при получении данных о кампании: {e2}")
+            return None
+
+def get_campaign_performance(campaign_id: Optional[str] = None) -> Union[Dict[str, Any], List[Dict[str, Any]]]:
+    """
+    Получение данных о производительности кампании или всех кампаний.
+    
+    Args:
+        campaign_id (str, optional): ID кампании. Если не указан, возвращаются данные по всем кампаниям.
+        
+    Returns:
+        Union[Dict[str, Any], List[Dict[str, Any]]]: Данные о производительности кампании или список данных о кампаниях.
+    """
+    try:
+        # Инициализация API
+        auth = FacebookAuth()
+        auth.initialize()
+        
+        if campaign_id:
+            # Получаем данные по конкретной кампании
+            campaign = Campaign(campaign_id)
             
+            # Получаем основные данные о кампании
+            campaign_data = campaign.api_get(fields=['id', 'name', 'status', 'objective', 'daily_budget', 'lifetime_budget'])
+            
+            # Определяем бюджет
+            budget = 0
+            if 'daily_budget' in campaign_data:
+                budget = float(campaign_data['daily_budget']) / 100  # Конвертируем из центов в доллары
+            elif 'lifetime_budget' in campaign_data:
+                budget = float(campaign_data['lifetime_budget']) / 100
+            
+            # Получаем метрики производительности
             try:
-                exported_file = export_format.export(report_data, file_path)
-                exported_files[format_name] = exported_file
+                insights = campaign.get_insights(fields=[
+                    'impressions',
+                    'clicks',
+                    'ctr',
+                    'cpc',
+                    'spend',
+                    'conversions',
+                    'cost_per_conversion'
+                ], params={
+                    'date_preset': 'last_30_days'
+                })
+                
+                # Форматируем метрики
+                metrics = {
+                    'impressions': 0,
+                    'clicks': 0,
+                    'ctr': 0,
+                    'cpc': 0,
+                    'spend': 0,
+                    'conversions': 0,
+                    'cost_per_conversion': 0
+                }
+                
+                if insights and len(insights) > 0:
+                    impressions = int(insights[0].get('impressions', 0))
+                    clicks = int(insights[0].get('clicks', 0))
+                    ctr = float(insights[0].get('ctr', 0)) * 100  # Конвертируем в проценты
+                    cpc = float(insights[0].get('cpc', 0))  # В долларах
+                    spend = float(insights[0].get('spend', 0))  # В долларах
+                    conversions = int(insights[0].get('conversions', 0))
+                    cost_per_conversion = float(insights[0].get('cost_per_conversion', 0))  # В долларах
+                    
+                    metrics = {
+                        'impressions': impressions,
+                        'clicks': clicks,
+                        'ctr': ctr,
+                        'cpc': cpc,
+                        'spend': spend,
+                        'conversions': conversions,
+                        'cost_per_conversion': cost_per_conversion
+                    }
             except Exception as e:
-                logger.error(f"Ошибка при экспорте отчета в формате {format_name}: {str(e)}")
+                logger.error(f"Ошибка при получении метрик для кампании {campaign_id}: {e}")
+            
+            # Формируем результат
+            return {
+                'id': campaign_data['id'],
+                'name': campaign_data['name'],
+                'status': campaign_data['status'],
+                'objective': campaign_data.get('objective', 'Не указано'),
+                'budget': budget,
+                'metrics': metrics
+            }
+        else:
+            # Получаем данные по всем кампаниям
+            campaigns_list = get_campaigns_list('ALL')
+            
+            # Если нет кампаний, возвращаем пустой список
+            if not campaigns_list:
+                return []
+            
+            # Для каждой кампании получаем метрики
+            result = []
+            for campaign in campaigns_list:
+                campaign_id = campaign['id']
+                
+                # Получаем метрики производительности
+                campaign_metrics = {
+                    'impressions': 0,
+                    'clicks': 0,
+                    'ctr': 0,
+                    'cpc': 0,
+                    'spend': 0,
+                    'conversions': 0,
+                    'cost_per_conversion': 0
+                }
+                
+                try:
+                    campaign_obj = Campaign(campaign_id)
+                    insights = campaign_obj.get_insights(fields=[
+                        'impressions',
+                        'clicks',
+                        'ctr',
+                        'cpc',
+                        'spend',
+                        'conversions',
+                        'cost_per_conversion'
+                    ], params={
+                        'date_preset': 'last_30_days'
+                    })
+                    
+                    if insights and len(insights) > 0:
+                        impressions = int(insights[0].get('impressions', 0))
+                        clicks = int(insights[0].get('clicks', 0))
+                        ctr = float(insights[0].get('ctr', 0)) * 100  # Конвертируем в проценты
+                        cpc = float(insights[0].get('cpc', 0))  # В долларах
+                        spend = float(insights[0].get('spend', 0))  # В долларах
+                        conversions = int(insights[0].get('conversions', 0))
+                        cost_per_conversion = float(insights[0].get('cost_per_conversion', 0))  # В долларах
+                        
+                        campaign_metrics = {
+                            'impressions': impressions,
+                            'clicks': clicks,
+                            'ctr': ctr,
+                            'cpc': cpc,
+                            'spend': spend,
+                            'conversions': conversions,
+                            'cost_per_conversion': cost_per_conversion
+                        }
+                except Exception as e:
+                    logger.error(f"Ошибка при получении метрик для кампании {campaign_id}: {e}")
+                
+                # Добавляем метрики к данным о кампании
+                campaign['metrics'] = campaign_metrics
+                result.append(campaign)
+            
+            return result
+    
+    except Exception as e:
+        logger.error(f"Ошибка при получении данных о кампании {campaign_id}: {e}")
+        logger.info("Попытка повторного подключения к Facebook API...")
         
-        return exported_files 
+        try:
+            # Повторная инициализация API с обновленным токеном
+            auth = FacebookAuth()
+            auth.initialize()  # Убран параметр force_refresh
+            
+            # Повторяем запрос (упрощенный вариант для повторной попытки)
+            if campaign_id:
+                campaign = Campaign(campaign_id)
+                campaign_data = campaign.api_get(fields=['id', 'name', 'status', 'objective', 'daily_budget', 'lifetime_budget'])
+                
+                # Определяем бюджет
+                budget = 0
+                if 'daily_budget' in campaign_data:
+                    budget = float(campaign_data['daily_budget']) / 100  # Конвертируем из центов в доллары
+                elif 'lifetime_budget' in campaign_data:
+                    budget = float(campaign_data['lifetime_budget']) / 100
+                
+                return {
+                    'id': campaign_data['id'],
+                    'name': campaign_data['name'],
+                    'status': campaign_data['status'],
+                    'objective': campaign_data.get('objective', 'Не указано'),
+                    'budget': budget,
+                    'metrics': {
+                        'impressions': 0,
+                        'clicks': 0,
+                        'ctr': 0,
+                        'cpc': 0,
+                        'spend': 0,
+                        'conversions': 0,
+                        'cost_per_conversion': 0
+                    }
+                }
+            else:
+                # Для всех кампаний возвращаем пустой список
+                return []
+                
+        except Exception as e2:
+            logger.error(f"Повторная ошибка при получении данных о кампании: {e2}")
+            # Возвращаем пустой результат
+            if campaign_id:
+                return {}
+            else:
+                return []
+
+def _get_test_campaigns(count: int, status_type: str) -> List[Dict[str, Any]]:
+    """
+    Генерация тестовых данных о кампаниях для отладки.
+    
+    Args:
+        count (int): Количество кампаний для генерации.
+        status_type (str): Тип статуса (ACTIVE, PAUSED, MIXED).
+        
+    Returns:
+        list: Список словарей с тестовыми данными о кампаниях.
+    """
+    result = []
+    objectives = ['CONVERSIONS', 'LINK_CLICKS', 'BRAND_AWARENESS', 'REACH']
+    
+    for i in range(1, count + 1):
+        if status_type == 'MIXED':
+            status = 'ACTIVE' if i % 2 == 0 else 'PAUSED'
+        else:
+            status = status_type
+        
+        campaign_id = f"12345678{i:02d}"
+        result.append({
+            'id': campaign_id,
+            'name': f"Тестовая кампания {i}",
+            'status': status,
+            'objective': random.choice(objectives),
+            'created_time': (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d'),
+            'start_time': (datetime.now() - timedelta(days=29)).strftime('%Y-%m-%d'),
+            'stop_time': None if status == 'ACTIVE' else datetime.now().strftime('%Y-%m-%d'),
+            'budget': random.uniform(1000, 5000)
+        })
+    
+    return result
+
+def _get_test_campaign_data(campaign_id: str) -> Dict[str, Any]:
+    """
+    Генерация тестовых данных о конкретной кампании для отладки.
+    
+    Args:
+        campaign_id (str): ID кампании.
+        
+    Returns:
+        dict: Словарь с тестовыми данными о кампании.
+    """
+    # Базовые данные о кампании
+    campaign_data = {
+        'id': campaign_id,
+        'name': f"Тестовая кампания {campaign_id[-2:]}",
+        'status': 'ACTIVE',
+        'objective': 'CONVERSIONS',
+        'created_time': (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d'),
+        'start_time': (datetime.now() - timedelta(days=29)).strftime('%Y-%m-%d'),
+        'stop_time': None,
+        'budget': random.uniform(1000, 5000),
+        'targeting_summary': "Страны: Россия; Возраст: 25-45; Пол: М, Ж"
+    }
+    
+    # Генерация статистики
+    total_impressions = 0
+    total_clicks = 0
+    total_spend = 0
+    total_conversions = 0
+    daily_stats = []
+    
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=30)
+    
+    current_date = start_date
+    while current_date <= end_date:
+        # Генерируем случайные данные с некоторой тенденцией
+        day_of_week = current_date.weekday()
+        day_factor = 1.0 + (day_of_week % 3) * 0.2  # Выше в начале недели
+        
+        impressions = int(random.uniform(800, 1500) * day_factor)
+        ctr = random.uniform(0.8, 2.5)
+        clicks = int(impressions * ctr / 100)
+        cpc = random.uniform(30, 80)
+        spend = clicks * cpc
+        conversions = int(clicks * random.uniform(0.05, 0.15))
+        
+        daily_stats.append({
+            'date': current_date.strftime('%Y-%m-%d'),
+            'impressions': impressions,
+            'clicks': clicks,
+            'spend': spend,
+            'ctr': ctr,
+            'cpc': cpc,
+            'conversions': conversions
+        })
+        
+        total_impressions += impressions
+        total_clicks += clicks
+        total_spend += spend
+        total_conversions += conversions
+        
+        current_date += timedelta(days=1)
+    
+    # Рассчитываем общие метрики
+    total_ctr = (total_clicks / total_impressions * 100) if total_impressions > 0 else 0
+    total_cpc = (total_spend / total_clicks) if total_clicks > 0 else 0
+    total_cost_per_conversion = (total_spend / total_conversions) if total_conversions > 0 else 0
+    
+    # Добавляем статистику в результат
+    campaign_data.update({
+        'impressions': total_impressions,
+        'clicks': total_clicks,
+        'spend': total_spend,
+        'ctr': total_ctr,
+        'cpc': total_cpc,
+        'conversions': total_conversions,
+        'cost_per_conversion': total_cost_per_conversion,
+        'daily_stats': daily_stats
+    })
+    
+    return campaign_data 

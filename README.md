@@ -1,105 +1,203 @@
-# Facebook Ads Data Analysis Tool
+# Facebook Ads Toolkit
 
-Инструмент для анализа эффективности рекламных кампаний Facebook, оптимизированный для быстрого получения и анализа данных.
+Инструмент для управления и анализа рекламных кампаний Facebook с использованием Facebook Marketing API.
+
+## Возможности
+
+- Управление рекламными кампаниями, группами объявлений и объявлениями
+- Анализ эффективности рекламы с расчетом ключевых метрик
+- Автоматическая оптимизация рекламных кампаний
+- Генерация отчетов в различных форматах
+- Интеграция с Telegram для отправки отчетов и уведомлений
+- CLI-интерфейс для удобного управления
+- Автоматизация отчетов через GitHub Actions
 
 ## Установка
 
-1. Клонируйте репозиторий:
 ```bash
-git clone <repository-url>
-cd target
-```
+# Клонирование репозитория
+git clone https://github.com/yourusername/facebook-ads-toolkit.git
+cd facebook-ads-toolkit
 
-2. Создайте виртуальное окружение и активируйте его:
-```bash
-python -m venv .venv
-source .venv/bin/activate  # для Linux/Mac
-# или
-.venv\Scripts\activate  # для Windows
-```
-
-3. Установите зависимости:
-```bash
+# Установка зависимостей
 pip install -r requirements.txt
+
+# Настройка переменных окружения
+cp examples/.env.example .env
+# Отредактируйте файл .env, добавив свои учетные данные
 ```
 
-4. Создайте файл `.env` с вашими учетными данными Facebook:
-```
-FB_ACCESS_TOKEN=your_access_token
-FB_ACCOUNT_ID=your_account_id
-FB_APP_ID=your_app_id
-```
+## Настройка
+
+1. Создайте приложение в [Facebook Developers](https://developers.facebook.com/)
+2. Получите токен доступа с необходимыми разрешениями
+3. Укажите ID рекламного аккаунта
+4. Заполните файл `.env` полученными данными
+
+### Настройка Telegram-бота
+
+1. Создайте нового бота через [@BotFather](https://t.me/BotFather) в Telegram
+2. Получите токен бота и добавьте его в файл `.env`
+3. Создайте канал для логов и добавьте бота в него как администратора
+4. Получите ID канала и добавьте его в файл `.env`
 
 ## Использование
 
-### Получение статистики по кампаниям
+### Управление кампаниями
 
-Базовое использование:
-```bash
-python get_campaigns_stats.py
+```python
+from facebook_ads_toolkit.campaign.manager import CampaignManager
+
+# Инициализация менеджера кампаний
+campaign_manager = CampaignManager()
+
+# Получение списка активных кампаний
+active_campaigns = campaign_manager.get_campaigns(status='ACTIVE')
+
+# Создание новой кампании
+new_campaign = campaign_manager.create_campaign(
+    name="Тестовая кампания",
+    objective="CONVERSIONS",
+    status="PAUSED",
+    special_ad_categories=[],
+    daily_budget=1000
+)
+
+# Обновление параметров кампании
+campaign_manager.update_campaign(
+    campaign_id=new_campaign['id'],
+    name="Обновленная тестовая кампания",
+    daily_budget=2000
+)
+
+# Остановка кампании
+campaign_manager.update_campaign_status(
+    campaign_id=new_campaign['id'],
+    status="PAUSED"
+)
 ```
 
-С параметрами:
-```bash
-# Данные за конкретный период
-python get_campaigns_stats.py --start-date 2024-01-01 --end-date 2024-01-31
+### Анализ эффективности
 
-# Топ-10 кампаний вместо 20
-python get_campaigns_stats.py --limit 10
+```python
+from facebook_ads_toolkit.analysis.ad_analyzer import AdAnalyzer
+
+# Инициализация анализатора
+analyzer = AdAnalyzer()
+
+# Анализ эффективности кампании
+performance = analyzer.analyze_campaign(
+    campaign_id="123456789",
+    date_preset="LAST_30_DAYS"
+)
+
+# Выявление неэффективных объявлений
+underperforming_ads = analyzer.find_underperforming_ads(
+    account_id="act_123456789",
+    metrics=["ctr", "cpc"],
+    threshold=0.5
+)
 ```
 
-#### Параметры
-- `--start-date` - начальная дата в формате YYYY-MM-DD (по умолчанию: начало текущего года)
-- `--end-date` - конечная дата в формате YYYY-MM-DD (по умолчанию: текущая дата)
-- `--limit` - количество топ кампаний для анализа (по умолчанию: 20)
+### Генерация отчетов
 
-Скрипт:
-1. Подключится к Facebook API
-2. Получит статистику по всем кампаниям за указанный период
-3. Отфильтрует топ-N кампаний по расходам (где N задается параметром --limit)
-4. Сохранит результаты в файл `top_campaigns_stats_YYYYMMDD.json`
+```python
+from facebook_ads_toolkit.reports.report_generator import ReportManager
 
-### Формат выходных данных
+# Инициализация менеджера отчетов
+report_manager = ReportManager(output_dir="reports")
 
-Данные сохраняются в JSON файл со следующей структурой:
-```json
-{
-  "campaign_id": "123",
-  "campaign_name": "Campaign Name",
-  "objective": "REACH",
-  "stats": {
-    "impressions": 1000,
-    "reach": 900,
-    "clicks": 100,
-    "spend": 50.0,
-    "actions": {
-      "link_click": 80,
-      "post_engagement": 120
-    }
-  },
-  "daily_stats": [...]
-}
+# Генерация отчета о производительности кампаний
+report_files = report_manager.generate_report(
+    template_name="campaign_performance",
+    data=performance_data,
+    export_formats=["json", "csv", "txt"]
+)
+```
+
+### Использование Telegram-бота
+
+```python
+from facebook_ads_toolkit.telegram_integration import run_bot
+
+# Запуск Telegram-бота
+run_bot()
+```
+
+Или запустите пример из директории examples:
+
+```bash
+python examples/telegram_bot_example.py
+```
+
+#### Команды Telegram-бота
+
+- `/start` - Начать работу с ботом
+- `/help` - Показать справку по командам
+- `/list` - Показать список активных кампаний
+- `/daily` - Получить ежедневный отчет
+- `/weekly` - Получить еженедельный отчет
+- `/campaign [ID]` - Информация о конкретной кампании
+- `/alerts` - Проверить наличие предупреждений
+
+## Автоматизация отчетов в облаке
+
+Проект настроен для автоматического запуска ежедневных отчетов с использованием GitHub Actions.
+
+### Настройка GitHub Actions
+
+1. Разместите проект в репозитории GitHub
+2. Добавьте следующие секреты в настройках репозитория (Settings > Secrets and variables > Actions):
+   - `FB_APP_ID` - ID приложения Facebook
+   - `FB_APP_SECRET` - Секрет приложения Facebook
+   - `FB_ACCESS_TOKEN` - Токен доступа Facebook
+   - `FB_AD_ACCOUNT_ID` - ID рекламного аккаунта
+   - `TELEGRAM_BOT_TOKEN` - Токен Telegram-бота
+   - `TELEGRAM_CHAT_ID` - ID чата или канала Telegram
+
+### Расписание запуска
+
+По умолчанию отчет запускается каждый день в 8:00 UTC (11:00 МСК). Вы можете изменить расписание, отредактировав файл `.github/workflows/daily_report.yml`.
+
+### Ручной запуск
+
+Вы также можете запустить генерацию отчета вручную через интерфейс GitHub:
+1. Перейдите в раздел Actions вашего репозитория
+2. Выберите workflow "Ежедневный отчет по рекламным кампаниям Facebook"
+3. Нажмите "Run workflow"
+
+### Доступ к отчетам
+
+После выполнения workflow отчеты будут доступны как артефакты в GitHub Actions и отправлены в настроенный Telegram-канал.
+
+## Структура проекта
+
+```
+facebook_ads_toolkit/
+├── auth/                  # Аутентификация с Facebook API
+├── campaign/              # Управление кампаниями
+├── analysis/              # Анализ эффективности
+├── reports/               # Генерация отчетов
+├── telegram_integration/  # Интеграция с Telegram
+├── cli/                   # CLI-интерфейс
+├── utils/                 # Вспомогательные функции
+└── config/                # Конфигурационные файлы
 ```
 
 ## Требования
 
 - Python 3.8+
-- Facebook Marketing API доступ
-- Права на чтение статистики рекламного аккаунта
-
-## Зависимости
-
-- facebook-business
+- facebook-business SDK
+- python-telegram-bot
+- pandas
+- matplotlib
+- pyyaml
 - python-dotenv
-- requests
-
-## Поддержка
-
-При возникновении проблем:
-1. Проверьте правильность учетных данных в `.env`
-2. Убедитесь, что у вас есть необходимые права доступа
-3. Проверьте логи для деталей ошибок
 
 ## Лицензия
 
 MIT
+
+## Автор
+
+Ваше имя - [ваш email](mailto:your.email@example.com)

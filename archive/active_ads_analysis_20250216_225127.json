@@ -1,0 +1,2280 @@
+[
+  {
+    "campaign": {
+      "id": "6686216478001",
+      "name": "[15.02.2025] Продвижение Отправить сообщение",
+      "objective": "MESSAGES",
+      "daily_budget": "500",
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6686216484001",
+      "name": "[15.02.2025] Продвижение Отправить сообщение",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 65,
+        "age_min": 23,
+        "genders": [
+          0
+        ],
+        "geo_locations": {
+          "countries": [
+            "KZ"
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_automation": {
+          "advantage_audience": 1
+        },
+        "publisher_platforms": [
+          "facebook",
+          "instagram",
+          "messenger"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6686216499401",
+      "name": "Пропагандирование призыва к действию: Отправить сообщение",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "2.99",
+      "impressions": "580",
+      "clicks": "54",
+      "ctr": "9.310345",
+      "cpc": "0.05537",
+      "reach": "523",
+      "frequency": "1.108987",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6684247959801",
+      "name": "Джульетта | 12.02.25",
+      "objective": "OUTCOME_ENGAGEMENT",
+      "daily_budget": "7500",
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6684253241601",
+      "name": "Широкая 23-50",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 65,
+        "age_min": 23,
+        "genders": [
+          0
+        ],
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "kilometer",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "radius": 20,
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_automation": {
+          "advantage_audience": 0
+        },
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "profile_reels",
+          "story",
+          "explore",
+          "reels",
+          "explore_home",
+          "profile_feed"
+        ],
+        "device_platforms": [
+          "mobile",
+          "desktop"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6684253241201",
+      "name": "Creo 3",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "14.61",
+      "impressions": "1455",
+      "clicks": "10",
+      "ctr": "0.687285",
+      "cpc": "1.461",
+      "reach": "1143",
+      "frequency": "1.272966",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6684247959801",
+      "name": "Джульетта | 12.02.25",
+      "objective": "OUTCOME_ENGAGEMENT",
+      "daily_budget": "7500",
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6684253241601",
+      "name": "Широкая 23-50",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 65,
+        "age_min": 23,
+        "genders": [
+          0
+        ],
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "kilometer",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "radius": 20,
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_automation": {
+          "advantage_audience": 0
+        },
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "profile_reels",
+          "story",
+          "explore",
+          "reels",
+          "explore_home",
+          "profile_feed"
+        ],
+        "device_platforms": [
+          "mobile",
+          "desktop"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6684253241001",
+      "name": "Creo 1",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "44.65",
+      "impressions": "5769",
+      "clicks": "78",
+      "ctr": "1.352054",
+      "cpc": "0.572436",
+      "reach": "4138",
+      "frequency": "1.394152",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6684247959801",
+      "name": "Джульетта | 12.02.25",
+      "objective": "OUTCOME_ENGAGEMENT",
+      "daily_budget": "7500",
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6684253241601",
+      "name": "Широкая 23-50",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 65,
+        "age_min": 23,
+        "genders": [
+          0
+        ],
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "kilometer",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "radius": 20,
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_automation": {
+          "advantage_audience": 0
+        },
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "profile_reels",
+          "story",
+          "explore",
+          "reels",
+          "explore_home",
+          "profile_feed"
+        ],
+        "device_platforms": [
+          "mobile",
+          "desktop"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6684253241401",
+      "name": "Creo 4",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "14.58",
+      "impressions": "1695",
+      "clicks": "9",
+      "ctr": "0.530973",
+      "cpc": "1.62",
+      "reach": "1369",
+      "frequency": "1.23813",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6684247959801",
+      "name": "Джульетта | 12.02.25",
+      "objective": "OUTCOME_ENGAGEMENT",
+      "daily_budget": "7500",
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6684253241601",
+      "name": "Широкая 23-50",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 65,
+        "age_min": 23,
+        "genders": [
+          0
+        ],
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "kilometer",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "radius": 20,
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_automation": {
+          "advantage_audience": 0
+        },
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "profile_reels",
+          "story",
+          "explore",
+          "reels",
+          "explore_home",
+          "profile_feed"
+        ],
+        "device_platforms": [
+          "mobile",
+          "desktop"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6684253241801",
+      "name": "Creo 2",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "87.11",
+      "impressions": "13945",
+      "clicks": "203",
+      "ctr": "1.455719",
+      "cpc": "0.429113",
+      "reach": "10543",
+      "frequency": "1.322679",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6684247959801",
+      "name": "Джульетта | 12.02.25",
+      "objective": "OUTCOME_ENGAGEMENT",
+      "daily_budget": "7500",
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6684247960401",
+      "name": "Интересы 23-50",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 50,
+        "age_min": 23,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6003176678152",
+                "name": "Автомобили"
+              },
+              {
+                "id": "6003384248805",
+                "name": "Фитнес и здоровый образ жизни"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5, Астана, Қазақстан",
+              "address_string": "Достық көшесі 5, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12796,
+              "longitude": 71.42217,
+              "radius": 7,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "none",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "profile_reels",
+          "story",
+          "explore",
+          "reels",
+          "explore_home",
+          "profile_feed"
+        ],
+        "device_platforms": [
+          "mobile",
+          "desktop"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6684252769401",
+      "name": "Creo 2",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "81.38",
+      "impressions": "10851",
+      "clicks": "195",
+      "ctr": "1.797069",
+      "cpc": "0.417333",
+      "reach": "7832",
+      "frequency": "1.38547",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6684247959801",
+      "name": "Джульетта | 12.02.25",
+      "objective": "OUTCOME_ENGAGEMENT",
+      "daily_budget": "7500",
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6684247960401",
+      "name": "Интересы 23-50",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 50,
+        "age_min": 23,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6003176678152",
+                "name": "Автомобили"
+              },
+              {
+                "id": "6003384248805",
+                "name": "Фитнес и здоровый образ жизни"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5, Астана, Қазақстан",
+              "address_string": "Достық көшесі 5, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12796,
+              "longitude": 71.42217,
+              "radius": 7,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "none",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "profile_reels",
+          "story",
+          "explore",
+          "reels",
+          "explore_home",
+          "profile_feed"
+        ],
+        "device_platforms": [
+          "mobile",
+          "desktop"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6684253046001",
+      "name": "Creo 4",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "7.49",
+      "impressions": "706",
+      "clicks": "4",
+      "ctr": "0.566572",
+      "cpc": "1.8725",
+      "reach": "559",
+      "frequency": "1.26297",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6684247959801",
+      "name": "Джульетта | 12.02.25",
+      "objective": "OUTCOME_ENGAGEMENT",
+      "daily_budget": "7500",
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6684247960401",
+      "name": "Интересы 23-50",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 50,
+        "age_min": 23,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6003176678152",
+                "name": "Автомобили"
+              },
+              {
+                "id": "6003384248805",
+                "name": "Фитнес и здоровый образ жизни"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5, Астана, Қазақстан",
+              "address_string": "Достық көшесі 5, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12796,
+              "longitude": 71.42217,
+              "radius": 7,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "none",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "profile_reels",
+          "story",
+          "explore",
+          "reels",
+          "explore_home",
+          "profile_feed"
+        ],
+        "device_platforms": [
+          "mobile",
+          "desktop"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6684252930201",
+      "name": "Creo 3",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "8.21",
+      "impressions": "595",
+      "clicks": "8",
+      "ctr": "1.344538",
+      "cpc": "1.02625",
+      "reach": "505",
+      "frequency": "1.178218",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6684247959801",
+      "name": "Джульетта | 12.02.25",
+      "objective": "OUTCOME_ENGAGEMENT",
+      "daily_budget": "7500",
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6684247960401",
+      "name": "Интересы 23-50",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 50,
+        "age_min": 23,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6003176678152",
+                "name": "Автомобили"
+              },
+              {
+                "id": "6003384248805",
+                "name": "Фитнес и здоровый образ жизни"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5, Астана, Қазақстан",
+              "address_string": "Достық көшесі 5, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12796,
+              "longitude": 71.42217,
+              "radius": 7,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "none",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "profile_reels",
+          "story",
+          "explore",
+          "reels",
+          "explore_home",
+          "profile_feed"
+        ],
+        "device_platforms": [
+          "mobile",
+          "desktop"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6684247960601",
+      "name": "Creo 1",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "11.3",
+      "impressions": "1101",
+      "clicks": "14",
+      "ctr": "1.271571",
+      "cpc": "0.807143",
+      "reach": "830",
+      "frequency": "1.326506",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6684244739201",
+      "name": "Тюльпаны оптом - 12.02.25",
+      "objective": "OUTCOME_TRAFFIC",
+      "daily_budget": null,
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6684244739601",
+      "name": "23-50 | Широкая",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
+      "daily_budget": "1500",
+      "lifetime_budget": "0",
+      "targeting": {
+        "age_max": 65,
+        "age_min": 23,
+        "age_range": [
+          23,
+          50
+        ],
+        "genders": [
+          0
+        ],
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "kilometer",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "radius": 20,
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_automation": {
+          "advantage_audience": 1
+        },
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6684244739401",
+      "name": "Creo 1",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "60.35",
+      "impressions": "59596",
+      "clicks": "675",
+      "ctr": "1.132626",
+      "cpc": "0.089407",
+      "reach": "49561",
+      "frequency": "1.202478",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6684244739201",
+      "name": "Тюльпаны оптом - 12.02.25",
+      "objective": "OUTCOME_TRAFFIC",
+      "daily_budget": null,
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6684244738801",
+      "name": "20-50 | Интересы",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
+      "daily_budget": "1500",
+      "lifetime_budget": "0",
+      "targeting": {
+        "age_max": 50,
+        "age_min": 23,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6003176678152",
+                "name": "Автомобили"
+              },
+              {
+                "id": "6003384248805",
+                "name": "Фитнес и здоровый образ жизни"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5, Астана, Қазақстан",
+              "address_string": "Достық көшесі 5, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12796,
+              "longitude": 71.42217,
+              "radius": 7,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "none",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6684244739001",
+      "name": "Creo 1",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "60.17",
+      "impressions": "58430",
+      "clicks": "601",
+      "ctr": "1.028581",
+      "cpc": "0.100116",
+      "reach": "42612",
+      "frequency": "1.37121",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6683155214201",
+      "name": "Тюльпан - 11.02.25",
+      "objective": "OUTCOME_TRAFFIC",
+      "daily_budget": null,
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6683232684001",
+      "name": "23-50 | Широкая — Копия",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
+      "daily_budget": "1500",
+      "lifetime_budget": "0",
+      "targeting": {
+        "age_max": 65,
+        "age_min": 23,
+        "age_range": [
+          23,
+          50
+        ],
+        "genders": [
+          0
+        ],
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "kilometer",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "radius": 20,
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_automation": {
+          "advantage_audience": 1
+        },
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6683232683801",
+      "name": "Creo 1",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "72.55",
+      "impressions": "73765",
+      "clicks": "529",
+      "ctr": "0.717142",
+      "cpc": "0.137146",
+      "reach": "52046",
+      "frequency": "1.417304",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6683155214201",
+      "name": "Тюльпан - 11.02.25",
+      "objective": "OUTCOME_TRAFFIC",
+      "daily_budget": null,
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6683155214601",
+      "name": "20-50 | Интересы",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
+      "daily_budget": "1500",
+      "lifetime_budget": "0",
+      "targeting": {
+        "age_max": 50,
+        "age_min": 23,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6003176678152",
+                "name": "Автомобили"
+              },
+              {
+                "id": "6003384248805",
+                "name": "Фитнес и здоровый образ жизни"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5, Астана, Қазақстан",
+              "address_string": "Достық көшесі 5, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12796,
+              "longitude": 71.42217,
+              "radius": 7,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "none",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6683155214401",
+      "name": "Creo 1",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "82.9",
+      "impressions": "79352",
+      "clicks": "697",
+      "ctr": "0.878365",
+      "cpc": "0.118938",
+      "reach": "55675",
+      "frequency": "1.425272",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6683148191601",
+      "name": "Цветы в пачке - 11.02.25",
+      "objective": "OUTCOME_TRAFFIC",
+      "daily_budget": null,
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6683232801801",
+      "name": "23-50 | Широкая",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
+      "daily_budget": "1500",
+      "lifetime_budget": "0",
+      "targeting": {
+        "age_max": 50,
+        "age_min": 23,
+        "genders": [
+          0
+        ],
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "kilometer",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "radius": 20,
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_automation": {
+          "advantage_audience": 0
+        },
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6683232801601",
+      "name": "Creo 1",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "72.99",
+      "impressions": "51793",
+      "clicks": "933",
+      "ctr": "1.801402",
+      "cpc": "0.078232",
+      "reach": "37577",
+      "frequency": "1.378317",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6683148191601",
+      "name": "Цветы в пачке - 11.02.25",
+      "objective": "OUTCOME_TRAFFIC",
+      "daily_budget": null,
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6683148191401",
+      "name": "20-50 | Интересы",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
+      "daily_budget": "1500",
+      "lifetime_budget": "0",
+      "targeting": {
+        "age_max": 50,
+        "age_min": 23,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6003176678152",
+                "name": "Автомобили"
+              },
+              {
+                "id": "6003384248805",
+                "name": "Фитнес и здоровый образ жизни"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5, Астана, Қазақстан",
+              "address_string": "Достық көшесі 5, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12796,
+              "longitude": 71.42217,
+              "radius": 7,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "none",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6683148191801",
+      "name": "Creo 1",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {
+      "spend": "82.78",
+      "impressions": "43564",
+      "clicks": "739",
+      "ctr": "1.696355",
+      "cpc": "0.112016",
+      "reach": "33771",
+      "frequency": "1.289983",
+      "date_start": "2025-01-17",
+      "date_stop": "2025-02-16"
+    }
+  },
+  {
+    "campaign": {
+      "id": "6587722792401",
+      "name": "Публикация в Instagram: Ассорти из голландских роз🤍",
+      "objective": "LINK_CLICKS",
+      "daily_budget": null,
+      "lifetime_budget": "1500"
+    },
+    "ad_set": {
+      "id": "6587722793801",
+      "name": "Instagram Post",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 45,
+        "age_min": 21,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6002944044446",
+                "name": "iPhone"
+              },
+              {
+                "id": "6003258544357",
+                "name": "Вес тела"
+              },
+              {
+                "id": "6003509853804",
+                "name": "iOS"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5, Астана, Қазақстан",
+              "address_string": "Достық көшесі 5, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12796,
+              "longitude": 71.422248,
+              "radius": 6,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "none",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6587722794801",
+      "name": "Публикация в Instagram: Ассорти из голландских роз🤍",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6587722652801",
+      "name": "Публикация в Instagram: Розовые розы🤍",
+      "objective": "LINK_CLICKS",
+      "daily_budget": null,
+      "lifetime_budget": "1500"
+    },
+    "ad_set": {
+      "id": "6587722653801",
+      "name": "Instagram Post",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 50,
+        "age_min": 20,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6003176678152",
+                "name": "Автомобили"
+              },
+              {
+                "id": "6003384248805",
+                "name": "Фитнес и здоровый образ жизни"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5, Астана, Қазақстан",
+              "address_string": "Достық көшесі 5, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12796,
+              "longitude": 71.42217,
+              "radius": 7,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "none",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6587722654401",
+      "name": "Публикация в Instagram: Розовые розы🤍",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6587722397801",
+      "name": "Публикация в Instagram: Белые розы🤍",
+      "objective": "LINK_CLICKS",
+      "daily_budget": null,
+      "lifetime_budget": "1500"
+    },
+    "ad_set": {
+      "id": "6587722398601",
+      "name": "Instagram Post",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 50,
+        "age_min": 20,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6003176678152",
+                "name": "Автомобили"
+              },
+              {
+                "id": "6003384248805",
+                "name": "Фитнес и здоровый образ жизни"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5, Астана, Қазақстан",
+              "address_string": "Достық көшесі 5, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12796,
+              "longitude": 71.42217,
+              "radius": 7,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "none",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6587722399601",
+      "name": "Публикация в Instagram: Белые розы🤍",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6587423831201",
+      "name": "Публикация в Instagram: Всеми любимые и...",
+      "objective": "LINK_CLICKS",
+      "daily_budget": null,
+      "lifetime_budget": "4000"
+    },
+    "ad_set": {
+      "id": "6587423831401",
+      "name": "Instagram Post",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 50,
+        "age_min": 20,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6003176678152",
+                "name": "Автомобили"
+              },
+              {
+                "id": "6003384248805",
+                "name": "Фитнес и здоровый образ жизни"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5, Астана, Қазақстан",
+              "address_string": "Достық көшесі 5, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12796,
+              "longitude": 71.42217,
+              "radius": 7,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "none",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6587423832401",
+      "name": "Публикация в Instagram: Всеми любимые и...",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6584124793201",
+      "name": "Публикация в Instagram: Самые красивые и...",
+      "objective": "MESSAGES",
+      "daily_budget": null,
+      "lifetime_budget": "2100"
+    },
+    "ad_set": {
+      "id": "6584124794201",
+      "name": "Instagram Post",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 50,
+        "age_min": 27,
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Studyinn, Достық көшесі, Астана, Қазақстан",
+              "address_string": "Studyinn, Достық көшесі, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12754,
+              "longitude": 71.42179,
+              "radius": 8,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "expansion_all",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "reels",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6584124794801",
+      "name": "Публикация в Instagram: Самые красивые и...",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6574158036601",
+      "name": "Публикация в Instagram: Самые элегантные и всеми...",
+      "objective": "MESSAGES",
+      "daily_budget": null,
+      "lifetime_budget": "3600"
+    },
+    "ad_set": {
+      "id": "6574158043201",
+      "name": "Instagram Post",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 50,
+        "age_min": 27,
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Studyinn, Достық көшесі, Астана, Қазақстан",
+              "address_string": "Studyinn, Достық көшесі, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12754,
+              "longitude": 71.42179,
+              "radius": 8,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "expansion_all",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6574158043801",
+      "name": "Публикация в Instagram: Самые элегантные и всеми...",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6572772074001",
+      "name": "Публикация в Instagram: Наглядная подборка...",
+      "objective": "MESSAGES",
+      "daily_budget": null,
+      "lifetime_budget": "4000"
+    },
+    "ad_set": {
+      "id": "6572772080401",
+      "name": "Instagram Post",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 50,
+        "age_min": 23,
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "mile",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "expansion_all",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6572772082001",
+      "name": "Публикация в Instagram: Наглядная подборка...",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6570659821801",
+      "name": "Публикация в Instagram: Свежие и хрустящие...",
+      "objective": "MESSAGES",
+      "daily_budget": null,
+      "lifetime_budget": "2100"
+    },
+    "ad_set": {
+      "id": "6570659823201",
+      "name": "Instagram Post",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 50,
+        "age_min": 20,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6003012436681",
+                "name": "Букет"
+              },
+              {
+                "id": "6003095705016",
+                "name": "Beauty & Fashion"
+              },
+              {
+                "id": "6003139266461",
+                "name": "Фильмы"
+              },
+              {
+                "id": "6003263791114",
+                "name": "Покупки"
+              },
+              {
+                "id": "6003313435915",
+                "name": "Красные розы"
+              },
+              {
+                "id": "6003527687042",
+                "name": "Flower"
+              },
+              {
+                "id": "6003582492638",
+                "name": "Счастье"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5/2, Астана, Қазақстан",
+              "address_string": "Достық көшесі 5/2, Астана, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.12869,
+              "longitude": 71.42255,
+              "radius": 12,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "none",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6570659823801",
+      "name": "Публикация в Instagram: Свежие и хрустящие...",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6567668722801",
+      "name": "Публикация в Instagram: Свежая поставка РОЗ😍...",
+      "objective": "LINK_CLICKS",
+      "daily_budget": "500",
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6567668733801",
+      "name": "Instagram Post",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 55,
+        "age_min": 18,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6003019539929",
+                "name": "Подарок"
+              },
+              {
+                "id": "6003259120909",
+                "name": "Цветок"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5/2, Нұр-Сұлтан, Қазақстан",
+              "address_string": "Достық көшесі 5/2, Нұр-Сұлтан, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.127777,
+              "longitude": 71.422684,
+              "radius": 7,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "expansion_all"
+      }
+    },
+    "ad": {
+      "id": "6567668734201",
+      "name": "Публикация в Instagram: Свежая поставка РОЗ😍...",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6567505772601",
+      "name": "Публикация в Instagram: Шикарная подборка букетов...",
+      "objective": "LINK_CLICKS",
+      "daily_budget": "500",
+      "lifetime_budget": null
+    },
+    "ad_set": {
+      "id": "6567505773601",
+      "name": "Instagram Post",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 55,
+        "age_min": 18,
+        "flexible_spec": [
+          {
+            "interests": [
+              {
+                "id": "6003019539929",
+                "name": "Подарок"
+              },
+              {
+                "id": "6003259120909",
+                "name": "Цветок"
+              }
+            ]
+          }
+        ],
+        "geo_locations": {
+          "custom_locations": [
+            {
+              "name": "Достық көшесі 5/2, Нұр-Сұлтан, Қазақстан",
+              "address_string": "Достық көшесі 5/2, Нұр-Сұлтан, Қазақстан",
+              "distance_unit": "kilometer",
+              "latitude": 51.127777,
+              "longitude": 71.422684,
+              "radius": 7,
+              "primary_city_id": 1301648,
+              "region_id": 2029,
+              "country": "KZ"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "expansion_all",
+        "publisher_platforms": [
+          "instagram"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6567505774401",
+      "name": "Публикация в Instagram: Шикарная подборка букетов...",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6559774753401",
+      "name": "Публикация в Instagram: CVETY.KZ 23 розы • 11 190 тг",
+      "objective": "LINK_CLICKS",
+      "daily_budget": null,
+      "lifetime_budget": "3000"
+    },
+    "ad_set": {
+      "id": "6559774754001",
+      "name": "Instagram Post",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 65,
+        "age_min": 18,
+        "custom_audiences": [
+          {
+            "id": "6094401058801",
+            "name": "Lookalike (KZ, 1%) - Instagram Automatic Audience"
+          }
+        ],
+        "genders": [
+          0
+        ],
+        "geo_locations": {
+          "countries": [
+            "KZ"
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "story",
+          "reels"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6559774754401",
+      "name": "Публикация в Instagram: CVETY.KZ 23 розы • 11 190 тг",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6559761502001",
+      "name": "Публикация в Instagram: Пионовидные розы White...",
+      "objective": "LINK_CLICKS",
+      "daily_budget": null,
+      "lifetime_budget": "3000"
+    },
+    "ad_set": {
+      "id": "6559761507201",
+      "name": "Instagram Post",
+      "optimization_goal": "LINK_CLICKS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 65,
+        "age_min": 18,
+        "custom_audiences": [
+          {
+            "id": "6094401058801",
+            "name": "Lookalike (KZ, 1%) - Instagram Automatic Audience"
+          }
+        ],
+        "genders": [
+          0
+        ],
+        "geo_locations": {
+          "countries": [
+            "KZ"
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6559761517001",
+      "name": "Публикация в Instagram: Пионовидные розы White...",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6558565833601",
+      "name": "Instagram Post",
+      "objective": "MESSAGES",
+      "daily_budget": null,
+      "lifetime_budget": "5000"
+    },
+    "ad_set": {
+      "id": "6558565835001",
+      "name": "Instagram Post",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 40,
+        "age_min": 25,
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "mile",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "expansion_all",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "story",
+          "reels"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6558565837801",
+      "name": "Instagram Post",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6558238348201",
+      "name": "Публикация в Instagram: 1-2-3? 🧡🤍🩷\n1 - сорт...",
+      "objective": "MESSAGES",
+      "daily_budget": null,
+      "lifetime_budget": "2700"
+    },
+    "ad_set": {
+      "id": "6558238349801",
+      "name": "Instagram Post",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 40,
+        "age_min": 25,
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "mile",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "expansion_all",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "profile_feed"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6558238353001",
+      "name": "Публикация в Instagram: 1-2-3? 🧡🤍🩷\n1 - сорт...",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6557435044801",
+      "name": "Публикация в Instagram: 8990 ТГ 9000 ТГ МИЛЫЕ...",
+      "objective": "MESSAGES",
+      "daily_budget": null,
+      "lifetime_budget": "2000"
+    },
+    "ad_set": {
+      "id": "6557435046401",
+      "name": "Instagram Post",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 40,
+        "age_min": 25,
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "mile",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "expansion_all",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "story",
+          "reels"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6557435047401",
+      "name": "Публикация в Instagram: 8990 ТГ 9000 ТГ МИЛЫЕ...",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6553904525401",
+      "name": "Публикация в Instagram: 11 шт 15 шт 25 шт 51 шт...",
+      "objective": "MESSAGES",
+      "daily_budget": null,
+      "lifetime_budget": "4000"
+    },
+    "ad_set": {
+      "id": "6553904536601",
+      "name": "Instagram Post",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 40,
+        "age_min": 25,
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "mile",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "expansion_all",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "story",
+          "reels"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6553904537601",
+      "name": "Публикация в Instagram: 11 шт 15 шт 25 шт 51 шт...",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6515117451201",
+      "name": "Публикация в Instagram: П И О Н Ы в наличии,...",
+      "objective": "MESSAGES",
+      "daily_budget": null,
+      "lifetime_budget": "2000"
+    },
+    "ad_set": {
+      "id": "6515117452601",
+      "name": "Instagram Post",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 40,
+        "age_min": 25,
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "mile",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "expansion_all",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "story",
+          "reels"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6515117453401",
+      "name": "Публикация в Instagram: П И О Н Ы в наличии,...",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  },
+  {
+    "campaign": {
+      "id": "6515116855801",
+      "name": "Публикация в Instagram: Состав: пионы, кустовые...",
+      "objective": "MESSAGES",
+      "daily_budget": null,
+      "lifetime_budget": "2500"
+    },
+    "ad_set": {
+      "id": "6515116856601",
+      "name": "Instagram Post",
+      "optimization_goal": "CONVERSATIONS",
+      "bid_strategy": null,
+      "daily_budget": null,
+      "lifetime_budget": null,
+      "targeting": {
+        "age_max": 40,
+        "age_min": 25,
+        "geo_locations": {
+          "cities": [
+            {
+              "country": "KZ",
+              "distance_unit": "mile",
+              "key": "1301648",
+              "name": "Tselinograd",
+              "region": "Akmola Region",
+              "region_id": "2029"
+            }
+          ],
+          "location_types": [
+            "home",
+            "recent"
+          ]
+        },
+        "targeting_optimization": "expansion_all",
+        "publisher_platforms": [
+          "instagram"
+        ],
+        "instagram_positions": [
+          "stream",
+          "story",
+          "explore",
+          "reels"
+        ]
+      }
+    },
+    "ad": {
+      "id": "6515116857201",
+      "name": "Публикация в Instagram: Состав: пионы, кустовые...",
+      "status": "ACTIVE",
+      "effective_status": "ACTIVE"
+    },
+    "statistics": {}
+  }
+]

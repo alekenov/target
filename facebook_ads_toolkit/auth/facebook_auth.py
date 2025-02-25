@@ -37,14 +37,15 @@ class FacebookAuth:
             else:
                 logger.warning("Файл .env не найден")
         
-        # Получаем переменные окружения
-        self.app_id = os.getenv('FB_APP_ID')
-        self.app_secret = os.getenv('FB_APP_SECRET')
-        self.access_token = os.getenv('FB_ACCESS_TOKEN')
-        self.account_id = os.getenv('FB_ACCOUNT_ID')
+        # Получаем переменные окружения, поддерживая оба формата (FACEBOOK_ и FB_)
+        self.app_id = os.getenv('FACEBOOK_APP_ID') or os.getenv('FB_APP_ID')
+        self.app_secret = os.getenv('FACEBOOK_APP_SECRET') or os.getenv('FB_APP_SECRET')
+        self.access_token = os.getenv('FACEBOOK_ACCESS_TOKEN') or os.getenv('FB_ACCESS_TOKEN')
+        self.account_id = os.getenv('FACEBOOK_AD_ACCOUNT_ID') or os.getenv('FB_ACCOUNT_ID')
         
         if not all([self.app_id, self.access_token, self.account_id]):
             logger.error("Не все параметры авторизации заданы в .env файле")
+            logger.error(f"app_id: {self.app_id}, access_token: {'Задан' if self.access_token else 'Не задан'}, account_id: {self.account_id}")
     
     def initialize(self) -> Tuple[Optional[AdAccount], Optional[FacebookAdsApi]]:
         """
@@ -105,6 +106,15 @@ class FacebookAuth:
             logger.warning("Facebook API не инициализирован. Вызовите метод initialize()")
         
         return self.api
+        
+    def get_ad_account_id(self) -> Optional[str]:
+        """
+        Получение ID рекламного аккаунта.
+        
+        Returns:
+            Optional[str]: ID рекламного аккаунта или None
+        """
+        return self.account_id
 
 
 # Функция для обратной совместимости
@@ -119,4 +129,26 @@ def init_facebook_api(env_path=None):
         tuple: (account, api) если успешно, иначе (None, None)
     """
     auth = FacebookAuth(env_path)
-    return auth.initialize() 
+    return auth.initialize()
+
+def get_api():
+    """
+    Получает инициализированный объект API Facebook.
+    
+    Returns:
+        FacebookAdsApi: Инициализированный объект API.
+    """
+    auth = FacebookAuth()
+    auth.initialize()
+    return auth.get_api()
+
+def get_ad_account():
+    """
+    Получает объект рекламного аккаунта Facebook.
+    
+    Returns:
+        AdAccount: Объект рекламного аккаунта.
+    """
+    auth = FacebookAuth()
+    auth.initialize()
+    return AdAccount(auth.get_ad_account_id()) 
