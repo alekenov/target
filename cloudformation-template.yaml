@@ -1,0 +1,131 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Настройка ресурсов для ежедневного отчета по рекламным кампаниям Facebook'
+
+Parameters:
+  S3BucketName:
+    Type: String
+    Description: Имя S3 бакета для хранения отчетов
+    Default: fb-ads-reports-bucket
+  
+  FacebookAppId:
+    Type: String
+    Description: ID приложения Facebook
+    NoEcho: true
+  
+  FacebookAppSecret:
+    Type: String
+    Description: Секрет приложения Facebook
+    NoEcho: true
+  
+  FacebookAccessToken:
+    Type: String
+    Description: Токен доступа Facebook
+    NoEcho: true
+  
+  FacebookAdAccountId:
+    Type: String
+    Description: ID рекламного аккаунта Facebook
+    NoEcho: true
+  
+  TelegramBotToken:
+    Type: String
+    Description: Токен бота Telegram
+    NoEcho: true
+  
+  TelegramChatId:
+    Type: String
+    Description: ID чата Telegram для отправки отчетов
+    NoEcho: true
+
+Resources:
+  # S3 бакет для хранения отчетов
+  ReportsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref S3BucketName
+      LifecycleConfiguration:
+        Rules:
+          - Id: DeleteOldReports
+            Status: Enabled
+            ExpirationInDays: 30
+  
+  # Роль для Lambda функции
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: S3Access
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                Resource: !Sub 'arn:aws:s3:::${S3BucketName}/*'
+  
+  # Lambda функция
+  DailyReportLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: fb-ads-daily-report
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: python3.9
+      Timeout: 300
+      MemorySize: 512
+      Environment:
+        Variables:
+          S3_BUCKET_NAME: !Ref S3BucketName
+          FACEBOOK_APP_ID: !Ref FacebookAppId
+          FACEBOOK_APP_SECRET: !Ref FacebookAppSecret
+          FACEBOOK_ACCESS_TOKEN: !Ref FacebookAccessToken
+          FACEBOOK_AD_ACCOUNT_ID: !Ref FacebookAdAccountId
+          TELEGRAM_BOT_TOKEN: !Ref TelegramBotToken
+          TELEGRAM_CHAT_ID: !Ref TelegramChatId
+      Code:
+        S3Bucket: !Ref S3BucketName
+        S3Key: lambda_package.zip
+  
+  # EventBridge правило для запуска Lambda функции ежедневно
+  DailyReportSchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: fb-ads-daily-report-schedule
+      Description: Запускает Lambda функцию ежедневно в 8:00 UTC
+      ScheduleExpression: cron(0 8 * * ? *)
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt DailyReportLambda.Arn
+          Id: DailyReportLambdaTarget
+  
+  # Разрешение для EventBridge вызывать Lambda функцию
+  LambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref DailyReportLambda
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt DailyReportSchedule.Arn
+
+Outputs:
+  LambdaFunction:
+    Description: Lambda функция для генерации отчетов
+    Value: !Ref DailyReportLambda
+  
+  S3Bucket:
+    Description: S3 бакет для хранения отчетов
+    Value: !Ref ReportsBucket
+  
+  S3BucketURL:
+    Description: URL S3 бакета
+    Value: !Sub 'https://s3.console.aws.amazon.com/s3/buckets/${S3BucketName}' 
