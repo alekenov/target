@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Настройка ресурсов для ежедневного отчета по рекламным кампаниям Facebook'
+Description: 'Настройка инфраструктуры для ежедневного отчета по рекламным кампаниям Facebook'
 
 Parameters:
   S3BucketName:
@@ -36,6 +36,22 @@ Parameters:
     Type: String
     Description: ID чата Telegram для отправки отчетов
     NoEcho: true
+  
+  DatabaseName:
+    Type: String
+    Description: Имя базы данных Aurora MySQL
+    Default: facebook_ads_db
+  
+  DatabaseUsername:
+    Type: String
+    Description: Имя пользователя базы данных
+    Default: admin
+    NoEcho: true
+  
+  DatabasePassword:
+    Type: String
+    Description: Пароль пользователя базы данных
+    NoEcho: true
 
 Resources:
   # S3 бакет для хранения отчетов
@@ -48,6 +64,166 @@ Resources:
           - Id: DeleteOldReports
             Status: Enabled
             ExpirationInDays: 30
+  
+  # VPC для размещения RDS и Lambda
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: fb-ads-vpc
+  
+  # Публичные подсети
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: fb-ads-public-subnet-1
+  
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: fb-ads-public-subnet-2
+  
+  # Internet Gateway
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: fb-ads-igw
+  
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+  
+  # Таблица маршрутизации для публичных подсетей
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: fb-ads-public-rt
+  
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable
+  
+  PublicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet2
+      RouteTableId: !Ref PublicRouteTable
+  
+  # Группа безопасности для RDS
+  RDSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Разрешить доступ к MySQL/Aurora
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: fb-ads-db-sg
+  
+  # Группа параметров для кластера Aurora MySQL
+  AuroraDBClusterParameterGroup:
+    Type: AWS::RDS::DBClusterParameterGroup
+    Properties:
+      Description: Группа параметров для кластера Aurora MySQL
+      Family: aurora-mysql8.0
+      Parameters:
+        character_set_server: utf8mb4
+        collation_server: utf8mb4_unicode_ci
+  
+  # Группа параметров для экземпляров Aurora MySQL
+  AuroraDBInstanceParameterGroup:
+    Type: AWS::RDS::DBParameterGroup
+    Properties:
+      Description: Группа параметров для экземпляров Aurora MySQL
+      Family: aurora-mysql8.0
+      Parameters:
+        max_connections: '1000'
+  
+  # Подгруппа для кластера Aurora
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Подгруппа подсетей для Aurora
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+      Tags:
+        - Key: Name
+          Value: fb-ads-db-subnet-group
+  
+  # Кластер Aurora MySQL
+  AuroraDBCluster:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      Engine: aurora-mysql
+      EngineVersion: 8.0.mysql_aurora.3.04.0
+      DatabaseName: !Ref DatabaseName
+      MasterUsername: !Ref DatabaseUsername
+      MasterUserPassword: !Ref DatabasePassword
+      BackupRetentionPeriod: 7
+      PreferredBackupWindow: 02:00-03:00
+      PreferredMaintenanceWindow: mon:03:00-mon:04:00
+      DBClusterParameterGroupName: !Ref AuroraDBClusterParameterGroup
+      VpcSecurityGroupIds:
+        - !GetAtt RDSSecurityGroup.GroupId
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      StorageEncrypted: true
+      DeletionProtection: false
+      Tags:
+        - Key: Name
+          Value: fb-ads-aurora-cluster
+  
+  # Экземпляр Aurora
+  AuroraDBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: fb-ads-aurora-instance
+      Engine: aurora-mysql
+      DBClusterIdentifier: !Ref AuroraDBCluster
+      DBInstanceClass: db.t4g.medium
+      DBParameterGroupName: !Ref AuroraDBInstanceParameterGroup
+      PubliclyAccessible: true
+      AutoMinorVersionUpgrade: true
+      Tags:
+        - Key: Name
+          Value: fb-ads-aurora-instance
   
   # Роль для Lambda функции
   LambdaExecutionRole:
@@ -62,6 +238,7 @@ Resources:
             Action: sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AmazonVPCFullAccess
       Policies:
         - PolicyName: S3Access
           PolicyDocument:
@@ -82,16 +259,27 @@ Resources:
       Role: !GetAtt LambdaExecutionRole.Arn
       Runtime: python3.9
       Timeout: 300
-      MemorySize: 512
+      MemorySize: 1024
       Environment:
         Variables:
           S3_BUCKET_NAME: !Ref S3BucketName
-          FACEBOOK_APP_ID: !Ref FacebookAppId
-          FACEBOOK_APP_SECRET: !Ref FacebookAppSecret
-          FACEBOOK_ACCESS_TOKEN: !Ref FacebookAccessToken
-          FACEBOOK_AD_ACCOUNT_ID: !Ref FacebookAdAccountId
+          FB_APP_ID: !Ref FacebookAppId
+          FB_APP_SECRET: !Ref FacebookAppSecret
+          FB_ACCESS_TOKEN: !Ref FacebookAccessToken
+          FB_ACCOUNT_ID: !Ref FacebookAdAccountId
           TELEGRAM_BOT_TOKEN: !Ref TelegramBotToken
           TELEGRAM_CHAT_ID: !Ref TelegramChatId
+          DB_HOST: !GetAtt AuroraDBCluster.Endpoint.Address
+          DB_PORT: !GetAtt AuroraDBCluster.Endpoint.Port
+          DB_NAME: !Ref DatabaseName
+          DB_USER: !Ref DatabaseUsername
+          DB_PASSWORD: !Ref DatabasePassword
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt RDSSecurityGroup.GroupId
+        SubnetIds:
+          - !Ref PublicSubnet1
+          - !Ref PublicSubnet2
       Code:
         S3Bucket: !Ref S3BucketName
         S3Key: lambda_package.zip
@@ -100,32 +288,120 @@ Resources:
   DailyReportSchedule:
     Type: AWS::Events::Rule
     Properties:
-      Name: fb-ads-daily-report-schedule
-      Description: Запускает Lambda функцию ежедневно в 8:00 UTC
+      Description: Ежедневный запуск отчета по рекламным кампаниям Facebook
       ScheduleExpression: cron(0 8 * * ? *)
       State: ENABLED
       Targets:
         - Arn: !GetAtt DailyReportLambda.Arn
-          Id: DailyReportLambdaTarget
+          Id: DailyReportTarget
   
-  # Разрешение для EventBridge вызывать Lambda функцию
-  LambdaPermission:
+  # Разрешение для EventBridge вызывать Lambda
+  PermissionForEventsToInvokeLambda:
     Type: AWS::Lambda::Permission
     Properties:
-      Action: lambda:InvokeFunction
       FunctionName: !Ref DailyReportLambda
+      Action: lambda:InvokeFunction
       Principal: events.amazonaws.com
       SourceArn: !GetAtt DailyReportSchedule.Arn
+  
+  # Lambda функция
+  ReportLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: fb-ads-hourly-report
+      Runtime: python3.11
+      Handler: lambda_function.lambda_handler
+      Code:
+        S3Bucket: !Ref S3BucketName
+        S3Key: lambda_package.zip
+      MemorySize: 512
+      Timeout: 300
+      Environment:
+        Variables:
+          FB_APP_ID: !Ref FacebookAppId
+          FB_ACCESS_TOKEN: !Ref FacebookAccessToken
+          FB_ACCOUNT_ID: !Ref FacebookAdAccountId
+          TELEGRAM_BOT_TOKEN: !Ref TelegramBotToken
+          TELEGRAM_CHAT_ID: !Ref TelegramChatId
+      Role: !GetAtt LambdaExecutionRole.Arn
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref LambdaSecurityGroup
+        SubnetIds:
+          - !Ref PublicSubnet1
+          - !Ref PublicSubnet2
+  
+  # EventBridge правило для ежечасного запуска
+  HourlyReportRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: fb-ads-hourly-report-rule
+      Description: Запускает Lambda функцию каждый час
+      ScheduleExpression: rate(1 hour)
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt ReportLambdaFunction.Arn
+          Id: HourlyReportTarget
+  
+  # Разрешение для EventBridge запускать Lambda
+  LambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ReportLambdaFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt HourlyReportRule.Arn
+  
+  # Роль для выполнения Lambda
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+      Policies:
+        - PolicyName: fb-ads-lambda-policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+  
+  # Группа безопасности для Lambda
+  LambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Lambda function
+      VpcId: !Ref VPC
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
 
 Outputs:
+  ReportsBucketURL:
+    Description: URL для доступа к бакету с отчетами
+    Value: !Sub https://s3.console.aws.amazon.com/s3/buckets/${S3BucketName}
+  
   LambdaFunction:
-    Description: Lambda функция для генерации отчетов
+    Description: Функция Lambda для ежедневных отчетов
     Value: !Ref DailyReportLambda
   
-  S3Bucket:
-    Description: S3 бакет для хранения отчетов
-    Value: !Ref ReportsBucket
+  AuroraDBEndpoint:
+    Description: Endpoint для подключения к базе данных Aurora
+    Value: !GetAtt AuroraDBCluster.Endpoint.Address
   
-  S3BucketURL:
-    Description: URL S3 бакета
-    Value: !Sub 'https://s3.console.aws.amazon.com/s3/buckets/${S3BucketName}' 
+  AuroraDBPort:
+    Description: Порт для подключения к базе данных Aurora
+    Value: !GetAtt AuroraDBCluster.Endpoint.Port

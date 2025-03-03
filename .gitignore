@@ -3,8 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Environment variables
-.env
+# Virtual environment
+.venv/
+venv/
+env/
 
 # Logs
 logs/*.log
@@ -12,15 +14,25 @@ logs/*.log
 # Cache
 cache/
 
-# Virtual environment
-.venv/
-
 # IDE files
 .idea/
 .vscode/
 *.swp
 *.swo
 
+# Old and backup files
+old_files/
+backup_before_cleanup/
+*~
+*.bak
+
+# Environment variables
+.env
+
+# Temporary files
+tmp/
+temp/
+
 # OS specific files
 .DS_Store
-Thumbs.db 
+Thumbs.db

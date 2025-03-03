@@ -1,6 +1,0 @@
-facebook-business
-python-telegram-bot
-pandas
-matplotlib
-pyyaml
-python-dotenv
