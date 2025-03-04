@@ -10,6 +10,8 @@ env/
 
 # Logs
 logs/*.log
+*.log
+facebook_data_collector.log
 
 # Cache
 cache/
@@ -36,3 +38,24 @@ temp/
 # OS specific files
 .DS_Store
 Thumbs.db
+
+# Database files
+*.db
+*.sqlite3
+
+# AWS credentials
+.aws/
+aws_credentials.json
+
+# Facebook API credentials
+facebook_credentials.json
+
+# Test files
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Build files
+dist/
+build/
+*.egg-info/

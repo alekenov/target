@@ -1,4 +1,4 @@
-facebook-business==17.0.0
+facebook-business==22.0.0
 python-telegram-bot[job-queue]==20.7
 python-dotenv==1.0.0
 pymysql==1.1.0
