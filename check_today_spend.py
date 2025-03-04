@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 import json
 from dotenv import load_dotenv
 import argparse
+import sys
 
 # Настройка логирования
 logging.basicConfig(
@@ -370,14 +371,12 @@ def main():
     # Загружаем переменные окружения
     load_dotenv()
     
-    # Устанавливаем ID аккаунта напрямую
-    os.environ['FB_ACCOUNT_ID'] = 'act_4795321857166878'
-    
     # Парсим аргументы командной строки
     parser = argparse.ArgumentParser(description='Проверка трат на рекламу в Facebook')
     parser.add_argument('--days', type=int, default=0, help='Количество дней для анализа (0 - только сегодня)')
     parser.add_argument('--yesterday', action='store_true', help='Показать данные за вчера')
     parser.add_argument('--date', type=str, help='Конкретная дата для анализа в формате YYYY-MM-DD')
+    parser.add_argument('--account', type=str, help='ID рекламного аккаунта (если не указан в .env)')
     
     args = parser.parse_args()
     
@@ -391,6 +390,10 @@ def main():
         yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
         specific_date = yesterday
         days = 0
+    
+    # Если указан ID аккаунта в аргументах, используем его
+    if args.account:
+        os.environ['FACEBOOK_AD_ACCOUNT_ID'] = args.account
     
     # Получаем данные о тратах
     try:
@@ -413,9 +416,14 @@ def main():
         else:
             print(f"\nОбщая сумма трат за сегодня: {total_spend:.2f} {currency}")
     
+    except ValueError as e:
+        logger.error(f"Ошибка валидации: {str(e)}")
+        print(f"Ошибка: {str(e)}")
+        sys.exit(1)
     except Exception as e:
         logger.error(f"Ошибка при выполнении скрипта: {str(e)}")
         print(f"Произошла ошибка: {str(e)}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
