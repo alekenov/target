@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Ads Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #4267B2;
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: bold;
+        }
+        .metric-card {
+            text-align: center;
+            padding: 15px;
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4267B2;
+        }
+        .metric-label {
+            font-size: 14px;
+            color: #666;
+        }
+        .chart-container {
+            height: 400px;
+            width: 100%;
+        }
+        .navbar-brand {
+            color: #4267B2 !important;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .date-filter {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Facebook Ads Dashboard</a>
+                <div class="date-filter">
+                    <label for="dateRange" class="form-label">Период:</label>
+                    <select id="dateRange" class="form-select">
+                        <option value="7">Последние 7 дней</option>
+                        <option value="14">Последние 14 дней</option>
+                        <option value="30">Последние 30 дней</option>
+                        <option value="90">Последние 90 дней</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Сводные метрики -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="metric-value" id="totalSpend">$0.00</div>
+                    <div class="metric-label">Общие траты</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="metric-value" id="totalImpressions">0</div>
+                    <div class="metric-label">Показы</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="metric-value" id="totalClicks">0</div>
+                    <div class="metric-label">Клики</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="metric-value" id="avgCTR">0.00%</div>
+                    <div class="metric-label">Средний CTR</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Графики -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Ежедневные траты</div>
+                    <div class="card-body">
+                        <div id="dailySpendChart" class="chart-container"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Показы и клики</div>
+                    <div class="card-body">
+                        <div id="impressionsClicksChart" class="chart-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">Эффективность кампаний</div>
+                    <div class="card-body">
+                        <div id="campaignPerformanceChart" class="chart-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Таблица кампаний -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">Список кампаний</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="campaignsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Название</th>
+                                        <th>Статус</th>
+                                        <th>Цель</th>
+                                        <th>Дневной бюджет</th>
+                                        <th>Дата начала</th>
+                                        <th>Дата окончания</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Данные будут загружены через JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Форматирование чисел
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Форматирование денежных значений
+        function formatMoney(num) {
+            return '$' + parseFloat(num).toFixed(2);
+        }
+
+        // Загрузка сводных данных
+        function loadSummary(days) {
+            fetch(`/api/summary?days=${days}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('totalSpend').textContent = formatMoney(data.total_spend);
+                    document.getElementById('totalImpressions').textContent = formatNumber(data.total_impressions);
+                    document.getElementById('totalClicks').textContent = formatNumber(data.total_clicks);
+                    document.getElementById('avgCTR').textContent = data.avg_ctr.toFixed(2) + '%';
+                })
+                .catch(error => console.error('Ошибка при загрузке сводных данных:', error));
+        }
+
+        // Загрузка ежедневных трат
+        function loadDailySpend(days) {
+            fetch(`/api/daily_spend?days=${days}`)
+                .then(response => response.json())
+                .then(data => {
+                    const dates = data.map(item => item.date);
+                    const spends = data.map(item => item.spend);
+
+                    const trace = {
+                        x: dates,
+                        y: spends,
+                        type: 'bar',
+                        marker: {
+                            color: '#4267B2'
+                        },
+                        hovertemplate: '%{x}<br>$%{y:.2f}<extra></extra>'
+                    };
+
+                    const layout = {
+                        margin: { t: 20, l: 60, r: 40, b: 60 },
+                        yaxis: {
+                            title: 'Траты ($)'
+                        },
+                        xaxis: {
+                            title: 'Дата'
+                        }
+                    };
+
+                    Plotly.newPlot('dailySpendChart', [trace], layout);
+                })
+                .catch(error => console.error('Ошибка при загрузке ежедневных трат:', error));
+        }
+
+        // Загрузка данных о показах и кликах
+        function loadImpressionsClicks(days) {
+            fetch(`/api/daily_spend?days=${days}`)
+                .then(response => response.json())
+                .then(data => {
+                    const dates = data.map(item => item.date);
+                    const impressions = data.map(item => item.impressions);
+                    const clicks = data.map(item => item.clicks);
+
+                    const trace1 = {
+                        x: dates,
+                        y: impressions,
+                        name: 'Показы',
+                        type: 'scatter',
+                        mode: 'lines+markers',
+                        marker: { color: '#4267B2' },
+                        line: { width: 3 }
+                    };
+
+                    const trace2 = {
+                        x: dates,
+                        y: clicks,
+                        name: 'Клики',
+                        type: 'scatter',
+                        mode: 'lines+markers',
+                        marker: { color: '#36A2EB' },
+                        line: { width: 3 },
+                        yaxis: 'y2'
+                    };
+
+                    const layout = {
+                        margin: { t: 20, l: 60, r: 60, b: 60 },
+                        legend: {
+                            orientation: 'h',
+                            y: 1.1
+                        },
+                        yaxis: {
+                            title: 'Показы',
+                            titlefont: { color: '#4267B2' },
+                            tickfont: { color: '#4267B2' }
+                        },
+                        yaxis2: {
+                            title: 'Клики',
+                            titlefont: { color: '#36A2EB' },
+                            tickfont: { color: '#36A2EB' },
+                            overlaying: 'y',
+                            side: 'right'
+                        },
+                        xaxis: {
+                            title: 'Дата'
+                        }
+                    };
+
+                    Plotly.newPlot('impressionsClicksChart', [trace1, trace2], layout);
+                })
+                .catch(error => console.error('Ошибка при загрузке данных о показах и кликах:', error));
+        }
+
+        // Загрузка данных о производительности кампаний
+        function loadCampaignPerformance(days) {
+            fetch(`/api/campaign_performance?days=${days}`)
+                .then(response => response.json())
+                .then(data => {
+                    const campaigns = data.map(item => item.campaign_name);
+                    const spends = data.map(item => item.spend);
+                    const ctrs = data.map(item => item.ctr);
+
+                    const trace1 = {
+                        x: campaigns,
+                        y: spends,
+                        name: 'Траты ($)',
+                        type: 'bar',
+                        marker: { color: '#4267B2' }
+                    };
+
+                    const trace2 = {
+                        x: campaigns,
+                        y: ctrs,
+                        name: 'CTR (%)',
+                        type: 'scatter',
+                        mode: 'lines+markers',
+                        marker: { color: '#FF6384', size: 10 },
+                        line: { width: 3 },
+                        yaxis: 'y2'
+                    };
+
+                    const layout = {
+                        margin: { t: 20, l: 60, r: 60, b: 120 },
+                        legend: {
+                            orientation: 'h',
+                            y: 1.1
+                        },
+                        yaxis: {
+                            title: 'Траты ($)',
+                            titlefont: { color: '#4267B2' },
+                            tickfont: { color: '#4267B2' }
+                        },
+                        yaxis2: {
+                            title: 'CTR (%)',
+                            titlefont: { color: '#FF6384' },
+                            tickfont: { color: '#FF6384' },
+                            overlaying: 'y',
+                            side: 'right'
+                        },
+                        xaxis: {
+                            title: 'Кампания',
+                            tickangle: -45
+                        }
+                    };
+
+                    Plotly.newPlot('campaignPerformanceChart', [trace1, trace2], layout);
+                })
+                .catch(error => console.error('Ошибка при загрузке данных о производительности кампаний:', error));
+        }
+
+        // Загрузка списка кампаний
+        function loadCampaigns() {
+            fetch('/api/campaigns')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#campaignsTable tbody');
+                    tableBody.innerHTML = '';
+
+                    data.forEach(campaign => {
+                        const row = document.createElement('tr');
+                        
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = campaign.name;
+                        row.appendChild(nameCell);
+                        
+                        const statusCell = document.createElement('td');
+                        statusCell.textContent = campaign.status;
+                        if (campaign.status === 'ACTIVE') {
+                            statusCell.className = 'text-success';
+                        } else if (campaign.status === 'PAUSED') {
+                            statusCell.className = 'text-warning';
+                        } else {
+                            statusCell.className = 'text-danger';
+                        }
+                        row.appendChild(statusCell);
+                        
+                        const objectiveCell = document.createElement('td');
+                        objectiveCell.textContent = campaign.objective;
+                        row.appendChild(objectiveCell);
+                        
+                        const budgetCell = document.createElement('td');
+                        if (campaign.daily_budget) {
+                            budgetCell.textContent = formatMoney(campaign.daily_budget);
+                        } else if (campaign.lifetime_budget) {
+                            budgetCell.textContent = formatMoney(campaign.lifetime_budget) + ' (lifetime)';
+                        } else {
+                            budgetCell.textContent = 'Не указан';
+                        }
+                        row.appendChild(budgetCell);
+                        
+                        const startDateCell = document.createElement('td');
+                        startDateCell.textContent = campaign.start_date || 'Не указана';
+                        row.appendChild(startDateCell);
+                        
+                        const endDateCell = document.createElement('td');
+                        endDateCell.textContent = campaign.end_date || 'Не указана';
+                        row.appendChild(endDateCell);
+                        
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Ошибка при загрузке списка кампаний:', error));
+        }
+
+        // Загрузка всех данных
+        function loadAllData(days) {
+            loadSummary(days);
+            loadDailySpend(days);
+            loadImpressionsClicks(days);
+            loadCampaignPerformance(days);
+            loadCampaigns();
+        }
+
+        // Обработчик изменения периода
+        document.getElementById('dateRange').addEventListener('change', function() {
+            const days = this.value;
+            loadAllData(days);
+        });
+
+        // Загрузка данных при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const days = document.getElementById('dateRange').value;
+            loadAllData(days);
+        });
+    </script>
+</body>
+</html>
