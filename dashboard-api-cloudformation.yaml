@@ -1,0 +1,110 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Facebook Ads Dashboard API Gateway and Lambda Integration'
+
+Resources:
+  DashboardApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: Facebook Ads Dashboard API
+      Description: API for Facebook Ads Dashboard
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+
+  DashboardApiRootMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DashboardApi
+      ResourceId: !GetAtt DashboardApi.RootResourceId
+      HttpMethod: ANY
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DashboardLambdaFunction.Arn}/invocations
+
+  DashboardApiProxyResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DashboardApi
+      ParentId: !GetAtt DashboardApi.RootResourceId
+      PathPart: '{proxy+}'
+
+  DashboardApiProxyMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DashboardApi
+      ResourceId: !Ref DashboardApiProxyResource
+      HttpMethod: ANY
+      AuthorizationType: NONE
+      RequestParameters:
+        method.request.path.proxy: true
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DashboardLambdaFunction.Arn}/invocations
+        RequestParameters:
+          integration.request.path.proxy: method.request.path.proxy
+
+  DashboardApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - DashboardApiRootMethod
+      - DashboardApiProxyMethod
+    Properties:
+      RestApiId: !Ref DashboardApi
+      StageName: prod
+
+  DashboardLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: facebook-ads-dashboard
+      Handler: lambda_handler.lambda_handler
+      Role: !GetAtt DashboardLambdaRole.Arn
+      Code:
+        S3Bucket: fb-ads-reports-bucket
+        S3Key: dashboard_lambda_package.zip
+      Runtime: python3.8
+      Timeout: 30
+      MemorySize: 256
+      Environment:
+        Variables:
+          AURORA_HOST: your-aurora-host
+          AURORA_PORT: 3306
+          AURORA_DATABASE_NAME: facebook_ads
+          AURORA_MASTER_USERNAME: admin
+          AURORA_MASTER_PASSWORD: your-password
+          FACEBOOK_APP_ID: your-app-id
+          FACEBOOK_APP_SECRET: your-app-secret
+          FACEBOOK_ACCESS_TOKEN: your-access-token
+          FACEBOOK_AD_ACCOUNT_ID: your-ad-account-id
+
+  DashboardLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref DashboardLambdaFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${DashboardApi}/*/*/*
+
+  DashboardLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+
+Outputs:
+  ApiGatewayUrl:
+    Description: URL of the API Gateway endpoint
+    Value: !Sub https://${DashboardApi}.execute-api.${AWS::Region}.amazonaws.com/prod/
+  LambdaArn:
+    Description: ARN of the Lambda function
+    Value: !GetAtt DashboardLambdaFunction.Arn

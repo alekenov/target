@@ -1,0 +1,200 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Facebook Ads Dashboard - Бессерверное развертывание на AWS Lambda и API Gateway'
+
+Parameters:
+  LambdaS3Bucket:
+    Type: String
+    Description: S3 бакет, содержащий ZIP-архив с кодом Lambda
+    
+  LambdaS3Key:
+    Type: String
+    Description: Путь к ZIP-архиву с кодом Lambda в S3 бакете
+    Default: dashboard_lambda_package.zip
+    
+  AuroraHost:
+    Type: String
+    Description: Хост базы данных Aurora MySQL
+    
+  AuroraPort:
+    Type: String
+    Description: Порт базы данных Aurora MySQL
+    Default: '3306'
+    
+  AuroraUsername:
+    Type: String
+    Description: Имя пользователя базы данных Aurora MySQL
+    
+  AuroraPassword:
+    Type: String
+    Description: Пароль базы данных Aurora MySQL
+    NoEcho: true
+    
+  AuroraDatabase:
+    Type: String
+    Description: Имя базы данных Aurora MySQL
+    
+  FacebookAppId:
+    Type: String
+    Description: ID приложения Facebook
+    
+  FacebookAppSecret:
+    Type: String
+    Description: Секрет приложения Facebook
+    NoEcho: true
+    
+  FacebookAccessToken:
+    Type: String
+    Description: Токен доступа Facebook
+    NoEcho: true
+    
+  FacebookAdAccountId:
+    Type: String
+    Description: ID рекламного аккаунта Facebook
+    
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VPC, в которой находится база данных Aurora
+    
+  SubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: Подсети для Lambda функции
+    
+  SecurityGroupIds:
+    Type: List<AWS::EC2::SecurityGroup::Id>
+    Description: Группы безопасности для Lambda функции
+
+Resources:
+  # IAM роль для Lambda функции
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+
+  # Lambda функция
+  DashboardLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: facebook-ads-dashboard
+      Handler: lambda_handler.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        S3Bucket: !Ref LambdaS3Bucket
+        S3Key: !Ref LambdaS3Key
+      Runtime: python3.8
+      Timeout: 30
+      MemorySize: 256
+      Environment:
+        Variables:
+          AURORA_HOST: !Ref AuroraHost
+          AURORA_PORT: !Ref AuroraPort
+          AURORA_MASTER_USERNAME: !Ref AuroraUsername
+          AURORA_MASTER_PASSWORD: !Ref AuroraPassword
+          AURORA_DATABASE_NAME: !Ref AuroraDatabase
+          FACEBOOK_APP_ID: !Ref FacebookAppId
+          FACEBOOK_APP_SECRET: !Ref FacebookAppSecret
+          FACEBOOK_ACCESS_TOKEN: !Ref FacebookAccessToken
+          FACEBOOK_AD_ACCOUNT_ID: !Ref FacebookAdAccountId
+      VpcConfig:
+        SecurityGroupIds: !Ref SecurityGroupIds
+        SubnetIds: !Ref SubnetIds
+
+  # API Gateway REST API
+  DashboardApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: facebook-ads-dashboard-api
+      Description: API для Facebook Ads Dashboard
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+
+  # Ресурс прокси для API Gateway
+  ProxyResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DashboardApi
+      ParentId: !GetAtt DashboardApi.RootResourceId
+      PathPart: '{proxy+}'
+
+  # Метод ANY для прокси-ресурса
+  ProxyMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DashboardApi
+      ResourceId: !Ref ProxyResource
+      HttpMethod: ANY
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DashboardLambdaFunction.Arn}/invocations
+
+  # Метод ANY для корневого ресурса
+  RootMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DashboardApi
+      ResourceId: !GetAtt DashboardApi.RootResourceId
+      HttpMethod: ANY
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DashboardLambdaFunction.Arn}/invocations
+
+  # Разрешение для вызова Lambda из API Gateway (прокси-ресурс)
+  ProxyLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref DashboardLambdaFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${DashboardApi}/*/*/*
+
+  # Разрешение для вызова Lambda из API Gateway (корневой ресурс)
+  RootLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref DashboardLambdaFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${DashboardApi}/*/*/
+
+  # Развертывание API
+  ApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - ProxyMethod
+      - RootMethod
+    Properties:
+      RestApiId: !Ref DashboardApi
+      StageName: prod
+
+  # CloudWatch Logs группа для Lambda
+  LambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${DashboardLambdaFunction}
+      RetentionInDays: 30
+
+Outputs:
+  ApiEndpoint:
+    Description: URL для доступа к дашборду
+    Value: !Sub https://${DashboardApi}.execute-api.${AWS::Region}.amazonaws.com/prod/
+    
+  LambdaArn:
+    Description: ARN Lambda функции
+    Value: !GetAtt DashboardLambdaFunction.Arn
+    
+  ApiId:
+    Description: ID API Gateway
+    Value: !Ref DashboardApi

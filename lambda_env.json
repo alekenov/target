@@ -1,0 +1,11 @@
+{
+  "AURORA_HOST": "ваш-хост-aurora",
+  "AURORA_PORT": "3306",
+  "AURORA_DATABASE_NAME": "facebook_ads",
+  "AURORA_MASTER_USERNAME": "ваш-пользователь",
+  "AURORA_MASTER_PASSWORD": "ваш-пароль",
+  "FACEBOOK_APP_ID": "ваш-app-id",
+  "FACEBOOK_APP_SECRET": "ваш-app-secret",
+  "FACEBOOK_ACCESS_TOKEN": "ваш-access-token",
+  "FACEBOOK_AD_ACCOUNT_ID": "ваш-account-id"
+}
