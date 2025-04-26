@@ -11,13 +11,12 @@ from typing import Tuple, Optional
 from facebook_business.api import FacebookAdsApi
 from facebook_business.adobjects.adaccount import AdAccount
 from facebook_business.adobjects.user import User
+from facebook_business.exceptions import FacebookRequestError
 from dotenv import load_dotenv
 
+from facebook_ads_toolkit.utils.api_error_handler import ApiErrorHandler, with_error_handling
+
 # Настройка логирования
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
 
 class FacebookAuth:
@@ -50,6 +49,13 @@ class FacebookAuth:
             self.api = None
             self.account = None
             
+            # Создаем обработчик ошибок
+            self.error_handler = ApiErrorHandler(
+                max_retries=3,
+                initial_delay=1,
+                max_delay=10
+            )
+            
             self._is_initialized = True
     
     def _validate_env_vars(self):
@@ -70,6 +76,54 @@ class FacebookAuth:
             logger.error(error_msg)
             raise ValueError(error_msg)
     
+    @with_error_handling()
+    def _initialize_api(self):
+        """
+        Инициализация Facebook API.
+        
+        Returns:
+            FacebookAdsApi: Инициализированный API
+            
+        Raises:
+            FacebookRequestError: Если произошла ошибка при инициализации
+        """
+        api = FacebookAdsApi.init(
+            app_id=self.app_id,
+            app_secret=self.app_secret,
+            access_token=self.access_token
+        )
+        
+        # Проверка валидности токена через запрос информации о пользователе
+        me = User(fbid='me')
+        me.api_get(fields=['id', 'name'])
+        
+        return api
+    
+    @with_error_handling()
+    def _get_account_info(self):
+        """
+        Получение информации о рекламном аккаунте.
+        
+        Returns:
+            Dict: Информация об аккаунте
+            
+        Raises:
+            FacebookRequestError: Если произошла ошибка при получении информации
+            Exception: Если аккаунт не активен
+        """
+        account = AdAccount(self.account_id)
+        account_info = account.api_get(fields=['name', 'account_status', 'disable_reason'])
+        
+        # Проверка статуса аккаунта
+        account_status = account_info.get('account_status')
+        if account_status != 1:  # 1 = ACTIVE
+            disable_reason = account_info.get('disable_reason')
+            error_msg = f"Аккаунт {self.account_id} не активен. Статус: {account_status}, Причина: {disable_reason}"
+            logger.error(error_msg)
+            raise Exception(error_msg)
+        
+        return account, account_info
+    
     def initialize(self) -> Tuple[Optional[AdAccount], Optional[FacebookAdsApi]]:
         """
         Инициализация Facebook API и получение объекта рекламного аккаунта.
@@ -82,28 +136,11 @@ class FacebookAuth:
             Exception: Если не удалось инициализировать API или получить доступ к аккаунту
         """
         try:
-            # Инициализация API
-            self.api = FacebookAdsApi.init(
-                app_id=self.app_id,
-                app_secret=self.app_secret,
-                access_token=self.access_token
-            )
-            
-            # Проверка валидности токена через запрос информации о пользователе
-            me = User(fbid='me')
-            me.api_get(fields=['id', 'name'])
+            # Инициализация API с обработкой ошибок
+            self.api = self._initialize_api()
             
             # Получение и проверка доступа к рекламному аккаунту
-            self.account = AdAccount(self.account_id)
-            account_info = self.account.api_get(fields=['name', 'account_status', 'disable_reason'])
-            
-            # Проверка статуса аккаунта
-            account_status = account_info.get('account_status')
-            if account_status != 1:  # 1 = ACTIVE
-                disable_reason = account_info.get('disable_reason')
-                error_msg = f"Аккаунт {self.account_id} не активен. Статус: {account_status}, Причина: {disable_reason}"
-                logger.error(error_msg)
-                raise Exception(error_msg)
+            self.account, account_info = self._get_account_info()
             
             logger.info(f"Успешно подключились к рекламному аккаунту {self.account_id} ({account_info.get('name')})")
             return self.account, self.api

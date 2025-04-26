@@ -13,7 +13,10 @@ CREATE TABLE IF NOT EXISTS campaigns (
     stop_time DATETIME,
     created_time DATETIME,
     updated_time DATETIME,
-    last_sync DATETIME
+    last_sync DATETIME,
+    INDEX status_idx (status),
+    INDEX created_time_idx (created_time),
+    INDEX start_time_idx (start_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Add last_sync column if it doesn't exist
@@ -47,7 +50,10 @@ CREATE TABLE IF NOT EXISTS ad_sets (
     created_time DATETIME,
     updated_time DATETIME,
     last_sync_time DATETIME,
-    FOREIGN KEY (campaign_id) REFERENCES campaigns(id)
+    FOREIGN KEY (campaign_id) REFERENCES campaigns(id),
+    INDEX campaign_id_idx (campaign_id),
+    INDEX status_idx (status),
+    INDEX created_time_idx (created_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create ads table
@@ -60,7 +66,10 @@ CREATE TABLE IF NOT EXISTS ads (
     created_time DATETIME,
     updated_time DATETIME,
     last_sync_time DATETIME,
-    FOREIGN KEY (ad_set_id) REFERENCES ad_sets(id)
+    FOREIGN KEY (ad_set_id) REFERENCES ad_sets(id),
+    INDEX ad_set_id_idx (ad_set_id),
+    INDEX status_idx (status),
+    INDEX created_time_idx (created_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create ad_insights table
@@ -77,7 +86,10 @@ CREATE TABLE IF NOT EXISTS ad_insights (
     created_time DATETIME,
     last_sync_time DATETIME,
     FOREIGN KEY (ad_id) REFERENCES ads(id),
-    UNIQUE KEY `ad_date_idx` (ad_id, date)
+    UNIQUE KEY ad_date_idx (ad_id, date),
+    INDEX date_idx (date),
+    INDEX spend_idx (spend),
+    INDEX ad_id_date_idx (ad_id, date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create config table

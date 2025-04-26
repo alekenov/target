@@ -388,7 +388,59 @@ Resources:
           FromPort: -1
           ToPort: -1
           CidrIp: 0.0.0.0/0
-
+  
+  # Lambda функция для дашборда
+  FacebookAdsReportFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: fb-ads-dashboard-report
+      Runtime: python3.11
+      Handler: lambda_function.lambda_handler
+      Code:
+        S3Bucket: !Ref S3BucketName
+        S3Key: lambda_package.zip
+      MemorySize: 512
+      Timeout: 300
+      Environment:
+        Variables:
+          FB_APP_ID: !Ref FacebookAppId
+          FB_ACCESS_TOKEN: !Ref FacebookAccessToken
+          FB_ACCOUNT_ID: !Ref FacebookAdAccountId
+          TELEGRAM_BOT_TOKEN: !Ref TelegramBotToken
+          TELEGRAM_CHAT_ID: !Ref TelegramChatId
+      Role: !GetAtt LambdaExecutionRole.Arn
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref LambdaSecurityGroup
+        SubnetIds:
+          - !Ref PublicSubnet1
+          - !Ref PublicSubnet2
+  
+  # URL для Lambda функции дашборда
+  FacebookAdsDashboardFunctionUrl:
+    Type: AWS::Lambda::Url
+    Properties:
+      AuthType: NONE
+      Cors:
+        AllowCredentials: true
+        AllowHeaders:
+          - '*'
+        AllowMethods:
+          - '*'
+        AllowOrigins:
+          - '*'
+        MaxAge: 86400
+      TargetFunctionArn: !GetAtt FacebookAdsReportFunction.Arn
+  
+  # Разрешение на вызов URL функции
+  FacebookAdsDashboardPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunctionUrl
+      FunctionName: !Ref FacebookAdsReportFunction
+      Principal: '*'
+      FunctionUrlAuthType: NONE
+  
 Outputs:
   ReportsBucketURL:
     Description: URL для доступа к бакету с отчетами
@@ -405,3 +457,7 @@ Outputs:
   AuroraDBPort:
     Description: Порт для подключения к базе данных Aurora
     Value: !GetAtt AuroraDBCluster.Endpoint.Port
+  
+  DashboardUrl:
+    Description: URL для доступа к дашборду Facebook Ads
+    Value: !GetAtt FacebookAdsDashboardFunctionUrl.FunctionUrl
